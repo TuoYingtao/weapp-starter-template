@@ -4,6 +4,8 @@
   "description": "小程序启动模板",
   "main": ".eslintrc.js",
   "scripts": {
+    "tsc": "node ./node_modules/typescript/lib/tsc.js",
+    "dev": "node ./plugins/script.env.js --dev",
     "unocss": "unocss pages/**/*.wxml -c unocss.config.js --watch -o unocss.wxss",
     "unocss:build": "unocss pages/**/*.wxml -c unocss.config.js -o  unocss.wxss",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,6 +16,7 @@
     "@vant/weapp": "^1.11.4"
   },
   "devDependencies": {
+    "typescript": "^5.4.2",
     "unocss": "^0.58.6",
     "unocss-preset-weapp": "^0.58.6"
   }

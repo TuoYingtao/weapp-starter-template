@@ -121,17 +121,17 @@ export default defineConfig({
     transformerAttributify(),
   ],
   shortcuts: [
-		// {
-		// 	'bg-gradient-primary': 'bg-gradient-to-r from-gradient-begin to-primary',
-		// 	'flex-center': 'flex items-center justify-center',
-		// 	'flex-c-b': 'flex items-center justify-between',
-		// 	'wh-full': 'w-100% h-100%',
-		// 	'pseudo-col': 'absolute top-1_2 -translate-y-1_2 content-[""]'
-		// },
-		// [/^(m|p)([trblxy]?)-(\d+)$/, ([, c, d, e]) => `${c + d}-${e}rpx`],
-		// [/^(rounded)-(\d+)$/, ([, c, d]) => `${c}-${d}rpx`],
-		// [/^wh-(\d+)$/, ([, c]) => `w-${c} h-${c}`],
-		// [/^(.*)-important$/, ([, style]) => `${style}!`]
+		{
+			'wh-full': 'w-100% h-100%',
+			'flex-center': 'flex items-center justify-center',
+			'flex-center-between': 'flex items-center justify-between',
+			'bg-gradient-primary': 'bg-gradient-to-r from-gradient-begin to-primary',
+			'pseudo-col': 'absolute top-1_2 -translate-y-1_2 content-[""]'
+		},
+		[/^wh-(\d+)$/, ([, c]) => `w-${c} h-${c}`],
+		[/^(m|p)([trblxy]?)-(\d+)$/, ([, c, d, e]) => `${c + d}-${e}rpx`],
+		[/^(rounded)-(\d+)$/, ([, c, d]) => `${c}-${d}rpx`],
+		[/^(.*)-important$/, ([, style]) => `${style}!`]
 	],
   separators:'__',
   postprocess(util) {

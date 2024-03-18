@@ -1,6 +1,6 @@
 <!--index.wxml-->
 <scroll-view class="scrollarea li-10" scroll-y type="list">
-  <view class="container w-10 h-10">
+  <view class="container wh-full bg-cityBg rounded-10">
     <view class="userinfo">
       <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
         <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
