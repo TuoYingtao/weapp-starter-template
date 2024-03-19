@@ -88,6 +88,18 @@ export function debounce(func, wait = 600) {
   }
 }
 
+/**
+ * 对象数组转字符串
+ * @param {Object} obj 对象数组
+ * @param {String} glue 拼接字符
+ */
+export function objectToJoin(obj, glue = '&') {
+	let arr = []
+	for (let k in obj) {
+		arr.push(`${k}=${obj[k]}`)
+	}
+	return arr.join(glue)
+}
 
 /**
  * 获取url地址中的参数
@@ -277,7 +289,7 @@ export function flatDeep(arr, d = 1) {
  * @returns {Promise<unknown>}
  */
 // #ifdef H5
-export function getBase64(url) {
+export function converImageToBase64(url) {
   return new Promise((resolve, reject) => {
     const Img = new Image()
     let dataURL = ''

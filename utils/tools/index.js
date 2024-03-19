@@ -11,7 +11,7 @@ import {isEmpty} from "@/utils";
  */
 export function showToast(str, icon = 'none', duration = 1500,mask = true) {
 	if (isEmpty(str)) return new Error(`提示信息不能为空`);
-	uni.showToast({ icon: icon, title: str, duration: duration,mask: mask });
+	wx.showToast({ icon: icon, title: str, duration: duration,mask: mask });
 }
 
 /**
@@ -59,7 +59,7 @@ export function showModal(config, successCallback, cancelCallback) {
 				}
 			}
 		}
-		uni.showModal(Object.assign({}, conf, config));
+		wx.showModal(Object.assign({}, conf, config));
 	})
 }
 
@@ -69,7 +69,7 @@ export function showModal(config, successCallback, cancelCallback) {
  */
 export function makePhoneCall(phoneNumber) {
 	if (!phoneNumber) return new Error(`拨打的号码不能为空`);
-	uni.makePhoneCall({
+	wx.makePhoneCall({
 		phoneNumber: phoneNumber,
 		fail: (err) => {
 			throw new Error(err.errMsg ?? '拨打手机号有误')
@@ -85,7 +85,7 @@ export function makePhoneCall(phoneNumber) {
  */
 export function getImageInfo(imagePath) {
 	return new Promise((resolve, reject) => {
-		uni.getImageInfo({
+		wx.getImageInfo({
 			src: imagePath,
 			success: (res) => {
 				resolve(res);
@@ -104,20 +104,20 @@ export function getImageInfo(imagePath) {
  */
 export function saveImage(imageUrl) {
 	return new Promise((resolve, reject) => {
-		uni.saveImageToPhotosAlbum({filePath: imageUrl}).then(([error, result]) => {
+		wx.saveImageToPhotosAlbum({filePath: imageUrl}).then(([error, result]) => {
 			if (error && error.errMsg) {
 				if (error.errMsg === "saveImageToPhotosAlbum:fail:auth denied"
 					|| error.errMsg === "saveImageToPhotosAlbum:fail auth deny"
 					|| error.errMsg === "saveImageToPhotosAlbum:fail authorize no response") {
-					uni.showModal({
+					wx.showModal({
 						title: '提示',
 						content: '需要授权才能将图片保存到相册',
 						showCancel: false,
 						success: (modalSuccess) => {
-							uni.openSetting({
+							wx.openSetting({
 								success(settingData) {
 									if (settingData.authSetting['scope.writePhotosAlbum']) {
-										uni.showLoading({ title: '保存中...', mask: true })
+										wx.showLoading({ title: '保存中...', mask: true })
 										saveImage(imageUrl);
 									} else {
 										showToast('获取权限失败，将无法保存到相册')
@@ -142,7 +142,7 @@ export function saveImage(imageUrl) {
  * @param data 复制的值；值的类型必须为String
  */
 export function setClipboardData(data) {
-	uni.setClipboardData({
+	wx.setClipboardData({
 		data,
 		fail: (err) => {
 			throw new Error(err.errMsg ?? '粘贴失败')
@@ -156,7 +156,7 @@ export function setClipboardData(data) {
  */
 export function getClipboardData() {
 	return new Promise((resolve, reject) => {
-		uni.getClipboardData().then(([error, result]) => {
+		wx.getClipboardData().then(([error, result]) => {
 			if (error) throw new Error(result.errMsg ?? error);
 			resolve(result)
 		})
@@ -173,7 +173,7 @@ export function getClipboardData() {
 export function navigateToMiniProgram(appId, path, extraData, envVersion = "release") {
 	if (!isString(appId)) throw new Error(`appId:${appId} 不适一个合法的字符串`);
 	return new Promise((resolve, reject) => {
-		uni.navigateToMiniProgram({
+		wx.navigateToMiniProgram({
 			appId: appId,
 			path: path,
 			extraData: extraData,
@@ -198,7 +198,7 @@ export function navigateToMiniProgram(appId, path, extraData, envVersion = "rele
  */
 export function navigateBackMiniProgram(extraData) {
 	return new Promise((resolve, reject) => {
-		uni.navigateBackMiniProgram({
+		wx.navigateBackMiniProgram({
 			extraData: extraData,
 			success: (res) => resolve(res),
 			fail: (error) => {
@@ -250,7 +250,7 @@ export function handlePageNavigate() {
  */
 export async function getImageUrl(url) {
 	let path = null
-	await uni.getImageInfo({
+	await wx.getImageInfo({
 		src: url
 	}).then(res => {
 		path = res[1].path
@@ -289,14 +289,14 @@ export function getSystemInfo() {
 export const checkAppUpdate = function() {
 
 	// 小程序版本支持getUpdateManager方法
-	if (uni.canIUse('getUpdateManager')) {
-		const updateManager = uni.getUpdateManager();
+	if (wx.canIUse('getUpdateManager')) {
+		const updateManager = wx.getUpdateManager();
 		// 检查版本完成
 		updateManager.onCheckForUpdate(function(res) {
 			if (res.hasUpdate) {
 				// 新版下载完成
 				updateManager.onUpdateReady(function() {
-					uni.showModal({
+					wx.showModal({
 						title: '更新提示',
 						content: '新版本已经准备好，请重启小程序体验新版',
 						showCancel: false,
@@ -309,13 +309,13 @@ export const checkAppUpdate = function() {
 				// 下载失败
 				updateManager.onUpdateFailed(function (res) {
 					// 新的版本下载失败
-					uni.showModal({
+					wx.showModal({
 						title: '更新失败',
 						content: '新版本下载失败，请删除当前小程序，重新搜索下载～',
 						showCancel: false,
 						success: (res) => {
 							// 新版下载失败，退出小程序
-							uni.navigateBack({
+							wx.navigateBack({
 								delta: 0,
 							});
 						},
@@ -325,7 +325,7 @@ export const checkAppUpdate = function() {
 		});
 	}else{
 		//如果用户手机的小程序版本过低提示
-		uni.showModal({
+		wx.showModal({
 			title: '温馨提示',
 			content: '当前微信版本过低，功能无法使用，请升级微信客户端',
 			showCancel: false

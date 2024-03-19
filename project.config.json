@@ -27,8 +27,8 @@
   },
   "appid": "wx82ccbac5ad7ec480",
   "scripts": {
-    "beforeCompile": "npm run tsc",
-    "beforePreview": "npm run tsc",
-    "beforeUpload": "npm run tsc"
+    "beforeCompile": "npm run dev",
+    "beforePreview": "npm run view",
+    "beforeUpload": "npm run pro"
   }
 }

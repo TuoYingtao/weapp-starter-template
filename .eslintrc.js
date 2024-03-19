@@ -26,6 +26,9 @@ module.exports = {
     requirePlugin: true,
     requireMiniProgram: true,
   },
-  // extends: 'eslint:recommended',
-  rules: {},
+  extends: ['eslint:recommended', '@unocss'],
+  rules: {
+    'no-unused-vars': 'warn',
+		'no-empty': ['error', { allowEmptyCatch: true }]
+  },
 }

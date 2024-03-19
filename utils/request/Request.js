@@ -191,7 +191,7 @@ export class VRequest {
       }
       conf.requestOptions = opt.requestOptions;
     }
-    const requestTask = uni.request(conf);
+    const requestTask = wx.request(conf);
     return requestTask.then(([error, response]) => {
       const { responseInterceptors, responseInterceptorsCatch, transformRequestHook } = transform;
       try {
@@ -202,7 +202,7 @@ export class VRequest {
         if (e.requestConfig && e.requestConfig.isRetry) {
           responseInterceptorsCatch(e.requestConfig);
         }
-        uni.showToast({ icon: 'none', title: e.message });
+        wx.showToast({ icon: 'none', title: e.message });
         throw new ResponseError(`
 请求地址：${e.url || conf.url};
 错误信息：${e.message};`);

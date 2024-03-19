@@ -69,7 +69,7 @@ const transform = {
           break;
         case REQUEST_STATUS_CODE.errorCode:
         default:
-          uni.showToast({ icon: 'none', title: message });
+          wx.showToast({ icon: 'none', title: message });
           throw new ResponseError(`【Response Error】${message || '未知错误'}`, config.url, data.status, data, res);
       }
     })

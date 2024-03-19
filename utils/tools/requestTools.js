@@ -16,7 +16,7 @@ const prefix = process.env.PREVIEW_PICTURE_URL;
 export function silenceAuthorizedLogin() {
   const requestInstance =  request.getRequest();
   return new Promise((resolve, reject) => {
-    uni.login({scopes: 'auth_base'}).then(([error, result]) => {
+    wx.login({scopes: 'auth_base'}).then(([error, result]) => {
 			if (error) throw new Error(result.errMsg ?? error);
 			let data = { code: result.code };
 			const instance = requestInstance({ url: '/weixin/login', method: 'POST', data}, {
@@ -64,12 +64,12 @@ export const getCredentials = function (callback, errCallback) {
  */
 export function upLoadFileTemplate() {
 	return new Promise((resolve, reject) => {
-		uni.chooseImage({
+		wx.chooseImage({
 			success: (chooseImageRes) => {
 				const tempFilePaths = chooseImageRes.tempFilePaths;
 				const key = genNewKey(tempFilePaths[0]);
 				getCosSecurity(function (authData) {
-					uni.uploadFile({
+					wx.uploadFile({
 						url: prefix,
 						filePath: tempFilePaths[0],
 						name: 'file',

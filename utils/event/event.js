@@ -25,13 +25,18 @@ class Event {
 		return Event.EVENT_LIST;
 	}
 
+	_getCurrentPage() {
+		const current = getCurrentPages().pop();
+		return current.getOpenerEventChannel();
+	}
+
 	/**
 	 * 触发事件
 	 * @param data 事件参数
 	 * @returns {*}
 	 */
 	$emit(data) {
-		return uni.$emit(this.eventName, data);
+		return _getCurrentPage().emit(this.eventName, data);
 	}
 
 	/**
@@ -40,7 +45,7 @@ class Event {
 	 * @returns {*}
 	 */
 	$on(callback) {
-		return uni.$on(this.eventName, callback);
+		return _getCurrentPage().on(this.eventName, callback);
 	}
 
 	/**
@@ -49,7 +54,7 @@ class Event {
 	 * @returns {*}
 	 */
 	$once(callback) {
-		return uni.$once(this.eventName, callback);
+		return _getCurrentPage().once(this.eventName, callback);
 	}
 
 	/**
@@ -58,7 +63,7 @@ class Event {
 	 * @returns {*}
 	 */
 	$off(callback) {
-		return uni.$off(this.eventName, callback);
+		return _getCurrentPage().off(this.eventName, callback);
 	}
 }
 

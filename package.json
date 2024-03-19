@@ -4,11 +4,12 @@
   "description": "小程序启动模板",
   "main": ".eslintrc.js",
   "scripts": {
-    "tsc": "node ./node_modules/typescript/lib/tsc.js",
-    "dev": "node ./plugins/script.env.js --dev",
+    "dev": "cross-env NODE_ENV=dev node ./plugins/script.env.js && echo \"Info: the current env is dev\" && exit 1",
+    "pro": "cross-env NODE_ENV=pro node ./plugins/script.env.js && echo \"Info: the current env is pro\" && exit 1",
+    "test": "cross-env NODE_ENV=test node ./plugins/script.env.js && echo \"Info: the current env is test\" && exit 1",
+    "view": "cross-env NODE_ENV=view node ./plugins/script.env.js && echo \"Info: the current env is view\" && exit 1",
     "unocss": "unocss pages/**/*.wxml -c unocss.config.js --watch -o unocss.wxss",
-    "unocss:build": "unocss pages/**/*.wxml -c unocss.config.js -o  unocss.wxss",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "unocss:build": "unocss pages/**/*.wxml -c unocss.config.js -o  unocss.wxss"
   },
   "author": "",
   "license": "ISC",
@@ -16,8 +17,10 @@
     "@vant/weapp": "^1.11.4"
   },
   "devDependencies": {
-    "typescript": "^5.4.2",
+    "cross-env": "^7.0.3",
     "unocss": "^0.58.6",
-    "unocss-preset-weapp": "^0.58.6"
-  }
+    "unocss-preset-weapp": "^0.58.6",
+    "yaml": "^2.4.1"
+  },
+  "type": "module"
 }

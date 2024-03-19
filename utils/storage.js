@@ -21,14 +21,14 @@ export const USER_INFO_KEY = "user_info_key";
  * @returns {*}
  */
 export const removeStorage = (storageKey) => {
-  return uni.removeStorageSync(storageKey)
+  return wx.removeStorageSync(storageKey)
 }
 
 /**
  * 获取token
  */
 export const getToken = () => {
-  let data = uni.getStorageSync(TOKEN_KEY);
+  let data = wx.getStorageSync(TOKEN_KEY);
   if (!data) data = { value: "", create_time: 0, expire_time: 0 };
   if (data.expire_time == 0) return data.value;
   else if (new Date().valueOf() - data.create_time > data.expire_time) return "";
@@ -41,7 +41,7 @@ export const getToken = () => {
  * @param {number} expireTime 过期时间(毫秒数)
  */
 export const setToken = (token = "", expireTime = 0) => {
-  uni.setStorageSync(TOKEN_KEY, {
+  wx.setStorageSync(TOKEN_KEY, {
     create_time: new Date().valueOf(),
     expire_time: expireTime,
     value: token,
@@ -53,7 +53,7 @@ export const setToken = (token = "", expireTime = 0) => {
  * @returns {*}
  */
 export const getUserInfoStorage = () => {
-  let data = uni.getStorageSync(USER_INFO_KEY);
+  let data = wx.getStorageSync(USER_INFO_KEY);
   return data;
 }
 
@@ -62,7 +62,7 @@ export const getUserInfoStorage = () => {
  * @param userinfo
  */
 export const setUserInfoStorage = (userinfo) => {
-  uni.setStorageSync(USER_INFO_KEY, userinfo);
+  wx.setStorageSync(USER_INFO_KEY, userinfo);
 }
 
 /**
@@ -70,7 +70,7 @@ export const setUserInfoStorage = (userinfo) => {
  * @returns {string|any}
  */
 export const getUploadCos = () => {
-  let data = uni.getStorageSync(UPLOAD_COS_KEY);
+  let data = wx.getStorageSync(UPLOAD_COS_KEY);
   if (!data) data = { value: "", startTime: 0, expireTime: 0 };
   if (data.expireTime == 0) return "";
   if (Date.now() / 1000 + 30 >= data.expireTime) return "";
@@ -84,7 +84,7 @@ export const getUploadCos = () => {
  * @param expireTime 密钥过期时间
  */
 export const setUploadCos = (data = {}, startTime, expireTime = 0) => {
-  uni.setStorageSync(UPLOAD_COS_KEY, {
+  wx.setStorageSync(UPLOAD_COS_KEY, {
     startTime,
     expireTime,
     value: JSON.stringify(data)

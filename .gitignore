@@ -1,2 +1,4 @@
-.vscode
-node_modules
+.vscode/
+.idea/
+node_modules/
+miniprogram_npm/
