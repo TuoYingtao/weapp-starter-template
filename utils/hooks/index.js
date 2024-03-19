@@ -1,8 +1,8 @@
-import {getUserInfoStorage} from "@/utils/storage";
-import {navigateTo} from "@/utils/tools/navigateTools";
-import {userAuditStatusApi} from "@/api/auditSteps";
-import {silenceAuthorizedLogin} from "@/utils/tools/requestTools";
-import {NewUserRegisterEnum} from "@/enum/GlobalEnums";
+import { getUserInfoStorage } from '@/utils/storage';
+import { navigateTo } from '@/utils/tools/navigateTools';
+import { userAuditStatusApi } from '@/api/auditSteps';
+import { silenceAuthorizedLogin } from '@/utils/tools/requestTools';
+import { NewUserRegisterEnum } from '@/enum/GlobalEnums';
 
 /**
  * 验证商家是否注册登录
@@ -12,8 +12,9 @@ import {NewUserRegisterEnum} from "@/enum/GlobalEnums";
  * @returns {*}
  */
 export function isRegisterMerchant(successCallback = null, errorCallback = null, isSilence = false) {
-  let userInfo = getUserInfoStorage();
-  if (isSilence && userInfo.status != NewUserRegisterEnum.NEW_STATUS) silenceAuthorizedLogin().then(r => (userInfo.status = 1));
+  const userInfo = getUserInfoStorage();
+  if (isSilence && userInfo.status != NewUserRegisterEnum.NEW_STATUS)
+    silenceAuthorizedLogin().then(r => (userInfo.status = 1));
   if (userInfo.status != NewUserRegisterEnum.NEW_STATUS) {
     if (errorCallback != null) {
       return errorCallback();
@@ -22,25 +23,23 @@ export function isRegisterMerchant(successCallback = null, errorCallback = null,
         switch (userAuditStatus) {
           case 0:
             return navigateTo({
-              url: "/pages_merchant/regist/index"
+              url: '/pages_merchant/regist/index',
             });
-            break;
           case 1:
           case 3:
             return navigateTo({
-              url: "/pages_result/auditSteps",
+              url: '/pages_result/auditSteps',
               query: {
                 userAuditStatus,
-              }
+              },
             });
-            break
-          default:;
+          default:
         }
-      })
+      });
     }
   } else {
     if (successCallback != null) {
-      return successCallback(userInfo)
+      return successCallback(userInfo);
     }
   }
 }

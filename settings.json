@@ -1,5 +1,6 @@
 {
-  "files.associations": { // 文件类型
+  "files.associations": {
+    // 文件类型
     "*.wxml": "html"
   }
 }

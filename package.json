@@ -9,7 +9,9 @@
     "test": "cross-env NODE_ENV=test node ./plugins/script.env.js && echo \"Info: the current env is test\" && exit 1",
     "view": "cross-env NODE_ENV=view node ./plugins/script.env.js && echo \"Info: the current env is view\" && exit 1",
     "unocss": "unocss pages/**/*.wxml -c unocss.config.js --watch -o unocss.wxss",
-    "unocss:build": "unocss pages/**/*.wxml -c unocss.config.js -o  unocss.wxss"
+    "unocss:build": "unocss pages/**/*.wxml -c unocss.config.js -o  unocss.wxss",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "format": "prettier --write ."
   },
   "author": "",
   "license": "ISC",
@@ -17,10 +19,15 @@
     "@vant/weapp": "^1.11.4"
   },
   "devDependencies": {
+    "@unocss/cli": "^0.58.5",
+    "@unocss/eslint-config": "^0.58.5",
     "cross-env": "^7.0.3",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "prettier": "^3.2.5",
     "unocss": "^0.58.6",
     "unocss-preset-weapp": "^0.58.6",
     "yaml": "^2.4.1"
-  },
-  "type": "module"
+  }
 }

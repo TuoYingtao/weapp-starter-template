@@ -13,7 +13,7 @@ export function trim(str) {
  * @returns {*}
  */
 export function removeAllSpace(str) {
-  return str.replace(/\s+/g, "");
+  return str.replace(/\s+/g, '');
 }
 
 /**
@@ -22,9 +22,11 @@ export function removeAllSpace(str) {
  * @returns {boolean}
  */
 export function isEmpty(str) {
-  if (str == null || Object.prototype.toString.call(str).slice(8, -1) == 'Undefined' ||
-    (Object.prototype.toString.call(str).slice(8, -1) === "String"
-      && (trim(str) == '' || trim(str) == 'null'))) {
+  if (
+    str == null ||
+    Object.prototype.toString.call(str).slice(8, -1) == 'Undefined' ||
+    (Object.prototype.toString.call(str).slice(8, -1) === 'String' && (trim(str) == '' || trim(str) == 'null'))
+  ) {
     return true;
   } else {
     return false;
@@ -37,7 +39,7 @@ export function isEmpty(str) {
  * @returns {boolean}
  */
 export function isArray(arr) {
-  return (typeof arr == 'object') && arr.constructor == Array
+  return typeof arr == 'object' && arr.constructor == Array;
 }
 
 /**
@@ -46,7 +48,7 @@ export function isArray(arr) {
  * @returns {boolean}
  */
 export function isEmptyObj(obj) {
-  return Object.keys(obj) === 0 ? true : false
+  return Object.keys(obj) === 0 ? true : false;
 }
 
 /**
@@ -58,7 +60,7 @@ export function isEmptyObj(obj) {
 export function throttle(func, delay = 1000) {
   let timer = null;
   let startTime = Date.now();
-  return function() {
+  return function () {
     const curTime = Date.now();
     const remaining = delay - (curTime - startTime);
     clearTimeout(timer);
@@ -68,7 +70,7 @@ export function throttle(func, delay = 1000) {
     } else {
       timer = setTimeout(() => false, remaining);
     }
-  }
+  };
 }
 
 /**
@@ -78,14 +80,14 @@ export function throttle(func, delay = 1000) {
  * @returns {function(...[*]=): void}
  */
 export function debounce(func, wait = 600) {
-  let timeout = null
-  return function() {
+  let timeout = null;
+  return function () {
     if (timeout !== null) clearTimeout(timeout);
     const execute = () => {
-      func.apply(this, arguments)
-    }
+      func.apply(this, arguments);
+    };
     timeout = setTimeout(execute, wait);
-  }
+  };
 }
 
 /**
@@ -94,21 +96,22 @@ export function debounce(func, wait = 600) {
  * @param {String} glue 拼接字符
  */
 export function objectToJoin(obj, glue = '&') {
-	let arr = []
-	for (let k in obj) {
-		arr.push(`${k}=${obj[k]}`)
-	}
-	return arr.join(glue)
+  const arr = [];
+  for (const k in obj) {
+    arr.push(`${k}=${obj[k]}`);
+  }
+  return arr.join(glue);
 }
 
 /**
  * 获取url地址中的参数
  */
 export function getURLParameter(name, url) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || [,
-    ""
-  ])[1]
-    .replace(/\+/g, '%20')) || null;
+  return (
+    decodeURIComponent(
+      (new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || ['', ''])[1].replace(/\+/g, '%20'),
+    ) || null
+  );
 }
 
 /**
@@ -135,7 +138,7 @@ export function deepCopy(obj) {
  * @param {*} phone 手机号
  */
 export function regPhone(phone) {
-  let regPhone = /^1[3456789]\d{9}$/;
+  const regPhone = /^1[3456789]\d{9}$/;
   return !regPhone.test(phone);
 }
 
@@ -147,8 +150,8 @@ export function regPhone(phone) {
  * @returns {boolean}
  */
 export function regName(params, min = 2, max = 10) {
-  const pattern = params.toString().replace(/\s/g, '').length > max
-    || params.toString().replace(/\s/g, '').length < min;
+  const pattern =
+    params.toString().replace(/\s/g, '').length > max || params.toString().replace(/\s/g, '').length < min;
   return pattern;
 }
 
@@ -158,7 +161,7 @@ export function regName(params, min = 2, max = 10) {
  * @param format 时间戳美化格式
  * @returns {string}
  */
-export function parseTime(time, pattern = "yyyy-MM-dd hh:mm:ss") {
+export function parseTime(time, pattern = 'yyyy-MM-dd hh:mm:ss') {
   if (arguments.length === 0 || !time) {
     return null;
   }
@@ -167,12 +170,12 @@ export function parseTime(time, pattern = "yyyy-MM-dd hh:mm:ss") {
   if (typeof time === 'object') {
     date = time;
   } else {
-    if ((typeof time === 'string') && (/^[0-9]+$/.test(time))) {
+    if (typeof time === 'string' && /^[0-9]+$/.test(time)) {
       time = parseInt(time);
     } else if (typeof time === 'string') {
       time = time.replace(new RegExp(/-/gm), '/');
     }
-    if ((typeof time === 'number') && (time.toString().length === 10)) {
+    if (typeof time === 'number' && time.toString().length === 10) {
       time = time * 1000;
     }
     date = new Date(time);
@@ -188,7 +191,9 @@ export function parseTime(time, pattern = "yyyy-MM-dd hh:mm:ss") {
   };
   const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key];
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
+    if (key === 'a') {
+      return ['日', '一', '二', '三', '四', '五', '六'][value];
+    }
     if (result.length > 0 && value < 10) {
       value = '0' + value;
     }
@@ -203,13 +208,12 @@ export function parseTime(time, pattern = "yyyy-MM-dd hh:mm:ss") {
  * @returns {number}
  */
 export function rad(d) {
-  return d * Math.PI / 180.0;
+  return (d * Math.PI) / 180.0;
 }
-
 
 /**
  * 根据经纬度计算距离，参数分别为第一点的纬度，经度；第二点的纬度，经度
-  * @param lat1 纬度-1
+ * @param lat1 纬度-1
  * @param lng1 进度-1
  * @param lat2 纬度-2
  * @param lng2 进度-2
@@ -220,8 +224,11 @@ export function getDistance(lat1, lng1, lat2, lng2) {
   const radLat2 = rad(lat2);
   const a = radLat1 - radLat2;
   const b = rad(lng1) - rad(lng2);
-  let s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) +
-    Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+  let s =
+    2 *
+    Math.asin(
+      Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)),
+    );
   s = s * 6378.137; // EARTH_RADIUS;
   s = Math.round(s * 10000) / 10000; //输出为公里
 
@@ -248,10 +255,10 @@ export function getDistance(lat1, lng1, lat2, lng2) {
  * @param pixelRatio 设备像素比 默认：1
  * @returns {string}
  */
-export function getAliOssImageUrl(url, limit = 0, mode = "fill", width, height, pixelRatio = 1) {
-  return height ?
-    `${url}?x-oss-process=image/resize,limit_${limit},m_${mode},w_${width/2*pixelRatio},h_${height/2*pixelRatio}` :
-    `${url}?x-oss-process=image/resize,limit_${limit},m_${mode},w_${width/2*pixelRatio}`
+export function getAliOssImageUrl(url, limit = 0, mode = 'fill', width, height, pixelRatio = 1) {
+  return height
+    ? `${url}?x-oss-process=image/resize,limit_${limit},m_${mode},w_${(width / 2) * pixelRatio},h_${(height / 2) * pixelRatio}`
+    : `${url}?x-oss-process=image/resize,limit_${limit},m_${mode},w_${(width / 2) * pixelRatio}`;
 }
 
 /**
@@ -265,10 +272,9 @@ export function getAliOssImageUrl(url, limit = 0, mode = "fill", width, height, 
  * @returns {string}
  */
 export function getTenOssImageUrl(url, mode = 2, width, height, pixelRatio = 1) {
-  return height ?
-    `${url}?imageView2/${mode}/w/${width/2*pixelRatio}/h/${height/2*pixelRatio}` :
-    `${url}?imageView2/${mode}/w/${width/2*pixelRatio}`
-
+  return height
+    ? `${url}?imageView2/${mode}/w/${(width / 2) * pixelRatio}/h/${(height / 2) * pixelRatio}`
+    : `${url}?imageView2/${mode}/w/${(width / 2) * pixelRatio}`;
 }
 
 /**
@@ -278,10 +284,10 @@ export function getTenOssImageUrl(url, mode = 2, width, height, pixelRatio = 1) 
  * @returns {*}
  */
 export function flatDeep(arr, d = 1) {
-  return d > 0 ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? flatDeep(val, d - 1) : val), []) :
-    arr.slice();
-};
-
+  return d > 0
+    ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? flatDeep(val, d - 1) : val), [])
+    : arr.slice();
+}
 
 /**
  * 图片地址转换成base64
@@ -291,22 +297,22 @@ export function flatDeep(arr, d = 1) {
 // #ifdef H5
 export function converImageToBase64(url) {
   return new Promise((resolve, reject) => {
-    const Img = new Image()
-    let dataURL = ''
-    Img.setAttribute('crossOrigin', 'Anonymous')
-    Img.src = url + '?v=' + Math.random()
-    Img.onload = function() {
+    const Img = new Image();
+    let dataURL = '';
+    Img.setAttribute('crossOrigin', 'Anonymous');
+    Img.src = url + '?v=' + Math.random();
+    Img.onload = function () {
       // 要先确保图片完整获取到，这是个异步事件
-      const canvas = document.createElement('canvas') // 创建canvas元素
-      const width = Img.width // 确保canvas的尺寸和图片一样
-      const height = Img.height
-      canvas.width = width
-      canvas.height = height
-      canvas.getContext('2d').drawImage(Img, 0, 0, width, height) // 将图片绘制到canvas中
-      dataURL = canvas.toDataURL('image/png') // 转换图片为dataURL
-      resolve(dataURL)
-    }
-  })
+      const canvas = document.createElement('canvas'); // 创建canvas元素
+      const width = Img.width; // 确保canvas的尺寸和图片一样
+      const height = Img.height;
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d').drawImage(Img, 0, 0, width, height); // 将图片绘制到canvas中
+      dataURL = canvas.toDataURL('image/png'); // 转换图片为dataURL
+      resolve(dataURL);
+    };
+  });
 }
 
 /**
@@ -315,10 +321,10 @@ export function converImageToBase64(url) {
  */
 export function funDownload(url) {
   // 创建隐藏的可下载链接
-  let eleLink = document.createElement('a');
-  eleLink.download = "share.png";
+  const eleLink = document.createElement('a');
+  eleLink.download = 'share.png';
   eleLink.style.display = 'none';
-  eleLink.href = url
+  eleLink.href = url;
   // eleLink.href = domImg.src
   // // 图片转base64地址
   // var canvas = document.createElement('canvas');
@@ -333,15 +339,15 @@ export function funDownload(url) {
   eleLink.click();
   // 然后移除
   document.body.removeChild(eleLink);
-};
+}
 
 /**
  * 判断是否在微信浏览器打开页面
  * @returns {boolean}
  */
 export function isWeixn() {
-  let ua = navigator.userAgent.toLowerCase();
-  if (ua.match(/MicroMessenger/i) == "micromessenger") {
+  const ua = navigator.userAgent.toLowerCase();
+  if (ua.match(/MicroMessenger/i) == 'micromessenger') {
     return true;
   } else {
     return false;

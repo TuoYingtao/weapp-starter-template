@@ -1,13 +1,12 @@
 import cloneDeep from 'lodash/cloneDeep';
 import isFunction from 'lodash/isFunction';
 import isUndefined from 'lodash/isUndefined';
-import {ResponseError} from "@/utils/request/ResponseErrorHandler";
+import { ResponseError } from '@/utils/request/ResponseErrorHandler';
 
 /**
  * Request 请求对象
  */
 export class VRequest {
-
   // request 实例
   #privateInstance;
 
@@ -68,7 +67,7 @@ export class VRequest {
   #privateSetupBeforeHook(config, options) {
     const transform = this.#privateGetTransform();
     if (!transform) {
-      console.warn('处理数据参数不能为空！')
+      console.warn('处理数据参数不能为空！');
     }
     let conf = cloneDeep(config);
     const { requestOptions } = this.#privateOptions;
@@ -80,7 +79,7 @@ export class VRequest {
       }
       conf.requestOptions = opt;
       resolve(conf);
-    })
+    });
   }
 
   /**
@@ -92,11 +91,11 @@ export class VRequest {
   #privateSetupInterceptors(config, options) {
     const transform = this.#privateGetTransform();
     if (!transform) {
-      console.warn('处理数据参数不能为空！')
+      console.warn('处理数据参数不能为空！');
     }
     let conf = cloneDeep(config);
     const opt = { ...this.#privateOptions };
-    opt.requestOptions = { ...opt.requestOptions, ...options }
+    opt.requestOptions = { ...opt.requestOptions, ...options };
     const { requestInterceptors } = transform;
     return new Promise((resolve, reject) => {
       if (requestInterceptors && isFunction(requestInterceptors)) {
@@ -104,7 +103,7 @@ export class VRequest {
       }
       conf.requestOptions = opt.requestOptions;
       resolve(conf);
-    })
+    });
   }
 
   /**
@@ -114,7 +113,7 @@ export class VRequest {
    * @returns {Promise<*>}
    */
   get(config, options) {
-    config.method = 'GET'
+    config.method = 'GET';
     return this.executor(config, options);
   }
 
@@ -125,7 +124,7 @@ export class VRequest {
    * @returns {Promise<*>}
    */
   post(config, options) {
-    config.method = 'POST'
+    config.method = 'POST';
     return this.executor(config, options);
   }
 
@@ -136,7 +135,7 @@ export class VRequest {
    * @returns {Promise<*>}
    */
   put(config, options) {
-    config.method = 'PUT'
+    config.method = 'PUT';
     return this.executor(config, options);
   }
 
@@ -147,7 +146,7 @@ export class VRequest {
    * @returns {Promise<*>}
    */
   delete(config, options) {
-    config.method = 'DELETE'
+    config.method = 'DELETE';
     return this.executor(config, options);
   }
 
@@ -158,7 +157,7 @@ export class VRequest {
    * @returns {Promise<*>}
    */
   patch(config, options) {
-    config.method = 'PATCH'
+    config.method = 'PATCH';
     return this.executor(config, options);
   }
 
@@ -172,7 +171,7 @@ export class VRequest {
     let conf = config || {};
     const { transform } = this.#privateOptions;
     if (conf && isUndefined(conf.retryCount) && isUndefined(conf.isAuthorized)) {
-      let confOpt = cloneDeep(conf);
+      const confOpt = cloneDeep(conf);
       const { requestOptions } = this.#privateOptions;
       const opt = { ...requestOptions, ...options };
       const { beforeRequestHook } = transform;
@@ -182,9 +181,9 @@ export class VRequest {
       conf.requestOptions = opt;
     }
     if ((conf && isUndefined(conf.retryCount)) || !isUndefined(conf.isAuthorized)) {
-      let confOpt = cloneDeep(conf);
+      const confOpt = cloneDeep(conf);
       const opt = { ...this.#privateOptions };
-      opt.requestOptions = { ...opt.requestOptions, ...options }
+      opt.requestOptions = { ...opt.requestOptions, ...options };
       const { requestInterceptors } = transform;
       if (requestInterceptors && isFunction(requestInterceptors)) {
         conf = requestInterceptors(confOpt, opt);
@@ -192,23 +191,23 @@ export class VRequest {
       conf.requestOptions = opt.requestOptions;
     }
     const requestTask = wx.request(conf);
-    return requestTask.then(([error, response]) => {
-      const { responseInterceptors, responseInterceptorsCatch, transformRequestHook } = transform;
-      try {
-        const res = responseInterceptors([error, response], conf);
-        const data = transformRequestHook(res, conf.requestOptions);
-        return data;
-      } catch (e) {
-        if (e.requestConfig && e.requestConfig.isRetry) {
-          responseInterceptorsCatch(e.requestConfig);
-        }
-        wx.showToast({ icon: 'none', title: e.message });
-        throw new ResponseError(`
+    return requestTask
+      .then(([error, response]) => {
+        const { responseInterceptors, responseInterceptorsCatch, transformRequestHook } = transform;
+        try {
+          const res = responseInterceptors([error, response], conf);
+          const data = transformRequestHook(res, conf.requestOptions);
+          return data;
+        } catch (e) {
+          if (e.requestConfig && e.requestConfig.isRetry) {
+            responseInterceptorsCatch(e.requestConfig);
+          }
+          wx.showToast({ icon: 'none', title: e.message });
+          throw new ResponseError(`
 请求地址：${e.url || conf.url};
 错误信息：${e.message};`);
-      }
-    }).finally(() => {
-
-    });
+        }
+      })
+      .finally(() => {});
   }
 }

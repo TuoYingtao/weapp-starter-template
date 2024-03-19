@@ -1,37 +1,37 @@
 /**
  * @const token储存的key
  */
-export const TOKEN_KEY = "user_token";
+export const TOKEN_KEY = 'user_token';
 
 /**
  * 腾讯云临时密钥存储
  * @type {string}
  */
-export const UPLOAD_COS_KEY = "upload_cos_key";
+export const UPLOAD_COS_KEY = 'upload_cos_key';
 
 /**
  * 用户信息
  * @type {string}
  */
-export const USER_INFO_KEY = "user_info_key";
+export const USER_INFO_KEY = 'user_info_key';
 
 /**
  * 删除缓存
  * @param storageKey
  * @returns {*}
  */
-export const removeStorage = (storageKey) => {
-  return wx.removeStorageSync(storageKey)
-}
+export const removeStorage = storageKey => {
+  return wx.removeStorageSync(storageKey);
+};
 
 /**
  * 获取token
  */
 export const getToken = () => {
   let data = wx.getStorageSync(TOKEN_KEY);
-  if (!data) data = { value: "", create_time: 0, expire_time: 0 };
+  if (!data) data = { value: '', create_time: 0, expire_time: 0 };
   if (data.expire_time == 0) return data.value;
-  else if (new Date().valueOf() - data.create_time > data.expire_time) return "";
+  else if (new Date().valueOf() - data.create_time > data.expire_time) return '';
   else return data.value;
 };
 
@@ -40,7 +40,7 @@ export const getToken = () => {
  * @param {string} token token的值
  * @param {number} expireTime 过期时间(毫秒数)
  */
-export const setToken = (token = "", expireTime = 0) => {
+export const setToken = (token = '', expireTime = 0) => {
   wx.setStorageSync(TOKEN_KEY, {
     create_time: new Date().valueOf(),
     expire_time: expireTime,
@@ -53,17 +53,17 @@ export const setToken = (token = "", expireTime = 0) => {
  * @returns {*}
  */
 export const getUserInfoStorage = () => {
-  let data = wx.getStorageSync(USER_INFO_KEY);
+  const data = wx.getStorageSync(USER_INFO_KEY);
   return data;
-}
+};
 
 /**
  * 设置用户信息
  * @param userinfo
  */
-export const setUserInfoStorage = (userinfo) => {
+export const setUserInfoStorage = userinfo => {
   wx.setStorageSync(USER_INFO_KEY, userinfo);
-}
+};
 
 /**
  * 获取腾讯云临时密钥
@@ -71,11 +71,11 @@ export const setUserInfoStorage = (userinfo) => {
  */
 export const getUploadCos = () => {
   let data = wx.getStorageSync(UPLOAD_COS_KEY);
-  if (!data) data = { value: "", startTime: 0, expireTime: 0 };
-  if (data.expireTime == 0) return "";
-  if (Date.now() / 1000 + 30 >= data.expireTime) return "";
+  if (!data) data = { value: '', startTime: 0, expireTime: 0 };
+  if (data.expireTime == 0) return '';
+  if (Date.now() / 1000 + 30 >= data.expireTime) return '';
   return JSON.parse(data.value);
-}
+};
 
 /**
  * 设置腾讯云临时密钥
@@ -87,6 +87,6 @@ export const setUploadCos = (data = {}, startTime, expireTime = 0) => {
   wx.setStorageSync(UPLOAD_COS_KEY, {
     startTime,
     expireTime,
-    value: JSON.stringify(data)
-  })
-}
+    value: JSON.stringify(data),
+  });
+};

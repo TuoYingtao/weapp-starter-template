@@ -1,12 +1,12 @@
-import fs from "fs";
-import yaml from "yaml";
+import fs from 'fs';
+import yaml from 'yaml';
 
 const preText = 'module.exports = ';
 const config = yaml.parse(fs.readFileSync(`${process.cwd()}/config.yaml`, 'utf8'));
 const globalEnv = {};
 
 const remoteUrlHandler = () => {
-  let remoteUrl = "";
+  let remoteUrl = '';
   if (process.env.NODE_ENV === 'dev') {
     remoteUrl = config.weapp.env.dev;
   } else if (process.env.NODE_ENV === 'pro') {
@@ -17,13 +17,13 @@ const remoteUrlHandler = () => {
     remoteUrl = config.weapp.env.view;
   }
   return remoteUrl;
-}
+};
 
 const previewPictureUrlHandler = () => {
   if (config.weapp.cos.bucket && config.weapp.cos.region) {
     return `https://${config.weapp.cos.bucket}.cos.${config.weapp.cos.region}.myqcloud.com/`;
   }
-  return "";
+  return '';
 };
 
 globalEnv.envType = process.env.NODE_ENV;
@@ -31,16 +31,15 @@ globalEnv.appID = config.weapp.appID;
 globalEnv.version = config.weapp.version;
 globalEnv.remoteUrl = remoteUrlHandler();
 globalEnv.cos = {};
-globalEnv.cos.Bucket = config.weapp.cos.bucket || "";
-globalEnv.cos.Region = config.weapp.cos.region || "";
+globalEnv.cos.Bucket = config.weapp.cos.bucket || '';
+globalEnv.cos.Region = config.weapp.cos.region || '';
 globalEnv.cos.previewPictureUrl = previewPictureUrlHandler();
 
-let result = null
-result = preText + JSON.stringify(globalEnv, null, 2)
+let result = null;
+result = preText + JSON.stringify(globalEnv, null, 2);
 
-fs.writeFile(`${process.cwd()}/config/env.js`, result, 'utf8', (err) => {
+fs.writeFile(`${process.cwd()}/config/env.js`, result, 'utf8', err => {
   if (err) {
-    throw new Error(`error occurs when reading file env.js. Error detail: ${err}`)
-    process.exit(1)
+    throw new Error(`error occurs when reading file env.js. Error detail: ${err}`);
   }
-})
+});

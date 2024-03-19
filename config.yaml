@@ -1,13 +1,12 @@
 weapp:
-  appID:                                          # 小程序ID
-  version: 1.0.0                                  # 小程序版本
-  env:                                            # 远程服务地址
+  appID: # 小程序ID
+  version: 1.0.0 # 小程序版本
+  env: # 远程服务地址
     dev: https://localhost:8080
     pro: https://localhost:8080
     test: https://localhost:8080
     view: https://localhost:8080
-  cos:                                            # COS 云存储对象
-    bucket: 
-    region: 
+  cos: # COS 云存储对象
+    bucket:
+    region:
     previewPictureUrl: https://${weapp.cos.Bucket}.cos.${weapp.cos.Region}.myqcloud.com/
-  
