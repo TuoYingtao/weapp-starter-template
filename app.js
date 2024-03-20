@@ -24,7 +24,9 @@ App({
     });
   },
   globalData: {
-    ...envConfig,
+    application: {
+      ...envConfig,
+    },
     router: router,
     userInfo: null,
   },

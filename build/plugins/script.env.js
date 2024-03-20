@@ -27,6 +27,7 @@ const previewPictureUrlHandler = () => {
 
 module.exports = function () {
   globalEnv.envType = process.env.NODE_ENV;
+  globalEnv.name = config.weapp.name;
   globalEnv.appID = config.weapp.appID;
   globalEnv.version = config.weapp.version;
   globalEnv.remoteUrl = remoteUrlHandler();

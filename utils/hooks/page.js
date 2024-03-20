@@ -1,8 +1,8 @@
 import { get } from './request';
-import { getNewUserInfo } from './index';
 import { converObjToString } from '@/utils/index';
 import { navigateTo, redirectTo, navigateBack } from '@/utils/tools/navigateTools';
 import { showLoading, hideLoading, showToast } from '@/utils/tools/index';
+import { getUserInfoStorage } from '@/utils/storage';
 
 export default (pageOptions, processDataCallback, beforeGetListCallback) => {
   const options = {};
@@ -27,6 +27,9 @@ export default (pageOptions, processDataCallback, beforeGetListCallback) => {
         back(delta) {
           navigateBack(delta);
         },
+        currentPages() {
+          return getCurrentPages();
+        },
       },
       $goPage(e) {
         const { url } = e.currentTarget.dataset;
@@ -47,14 +50,14 @@ export default (pageOptions, processDataCallback, beforeGetListCallback) => {
       $loaded: hideLoading,
       onShareAppMessage: function () {
         return {
-          title: '靓机汇回收报价单',
-          path: `${this.route}?scene=${getNewUserInfo('id', '')}`,
+          title: this.data.$globalData.application.name,
+          path: `${this.route}?scene=${converObjToString(getUserInfoStorage())}`,
         };
       },
       onShareTimeline: function () {
         return {
-          title: '靓机汇回收报价单',
-          query: `${this.route}?scene=${getNewUserInfo('id', '')}`,
+          title: this.data.$globalData.application.name,
+          query: `${this.route}?scene=${converObjToString(getUserInfoStorage())}`,
         };
       },
       $tm() {},

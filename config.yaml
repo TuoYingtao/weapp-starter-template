@@ -1,5 +1,6 @@
 weapp:
-  appID: # 小程序ID
+  name: weapp-starter-template # 小程序名字
+  appID: wx82ccbac5ad7ec480 # 小程序ID
   version: 1.0.0 # 小程序版本
   env: # 远程服务地址
     dev: https://localhost:8080
