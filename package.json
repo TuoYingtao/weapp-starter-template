@@ -29,5 +29,6 @@
     "unocss": "^0.58.6",
     "unocss-preset-weapp": "^0.58.6",
     "yaml": "^2.4.1"
-  }
+  },
+  "type": "commonjs"
 }

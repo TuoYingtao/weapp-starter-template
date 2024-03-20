@@ -1,6 +1,5 @@
-import fs from 'fs';
-import yaml from 'yaml';
-
+const fs = require('fs');
+const yaml = require('yaml');
 const preText = 'module.exports = ';
 const config = yaml.parse(fs.readFileSync(`${process.cwd()}/config.yaml`, 'utf8'));
 const globalEnv = {};
