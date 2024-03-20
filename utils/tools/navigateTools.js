@@ -6,7 +6,7 @@ import qs from 'qs';
 /**
  * @const 定义TabBar的页面数组
  */
-const tabViewArray = ['/pages/index/index', '/pages/sort/index', '/pages/cart/index', '/pages/user/index'];
+const tabViewArray = require('../../config/router').mainPage;
 
 /**
  * @method 页面跳转

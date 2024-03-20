@@ -19,6 +19,5 @@ module.exports = {
   insertPragma: false, // 不需要自动在文件开头插入 @prettier
   proseWrap: 'preserve', // 使用默认的折行标准
   htmlWhitespaceSensitivity: 'css', // 根据显示样式决定 html 要不要折行
-  vueIndentScriptAndStyle: false, // vue 文件中的 script 和 style 内不用缩进
   endOfLine: 'lf', // 换行符使用 lf
 };

@@ -1,8 +1,6 @@
 import qs from 'qs';
-import isString from 'lodash/isString';
-import cloneDeep from 'lodash/cloneDeep';
 import { navigateTo } from '@/utils/tools/navigateTools';
-import { isEmpty } from '@/utils';
+import { isNull, isEmpty, isString, cloneDeep } from '@/utils/index';
 
 /**
  * 提示信息
@@ -10,7 +8,7 @@ import { isEmpty } from '@/utils';
  * @param icon 提示icon 默认：none
  */
 export function showToast(str, icon = 'none', duration = 1500, mask = true) {
-  if (isEmpty(str)) return new Error(`提示信息不能为空`);
+  if (isNull(str)) return new Error(`提示信息不能为空`);
   wx.showToast({ icon: icon, title: str, duration: duration, mask: mask });
 }
 
@@ -236,9 +234,10 @@ export function isSearchScene(query) {
  * 跳转处理
  */
 export function handlePageNavigate() {
-  const defaultPage = '/pages/index/index';
+  const ROUTES = require('@/config/router');
+  const defaultPage = ROUTES.defaultPage;
   // 检查页面是否存在
-  const path = ROUTES.find(it => it.path.endsWith(this.query.p))?.path ?? defaultPage;
+  const path = ROUTES.pageAll.find(it => it.path.endsWith(this.query.p))?.path ?? defaultPage;
   const query = cloneDeep(this.query);
   delete query.p;
 

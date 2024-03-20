@@ -1,6 +1,6 @@
 import { get } from './request';
 import { getNewUserInfo } from './index';
-import { objectToJoin } from '@/utils/index';
+import { converObjToString } from '@/utils/index';
 import { navigateTo, redirectTo, navigateBack } from '@/utils/tools/navigateTools';
 import { showLoading, hideLoading, showToast } from '@/utils/tools/index';
 
@@ -19,10 +19,10 @@ export default (pageOptions, processDataCallback, beforeGetListCallback) => {
       },
       $router: {
         push(url, params) {
-          navigateTo(`/pages${url}/index${params ? '?' + objectToJoin(params) : ''}`);
+          navigateTo(`/pages${url}/index${params ? '?' + converObjToString(params) : ''}`);
         },
         replace(url, params) {
-          redirectTo(`/pages${url}/index${params ? '?' + objectToJoin(params) : ''}`);
+          redirectTo(`/pages${url}/index${params ? '?' + converObjToString(params) : ''}`);
         },
         back(delta) {
           navigateBack(delta);

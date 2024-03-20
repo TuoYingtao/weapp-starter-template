@@ -1,55 +1,131 @@
 /**
+ * 手机号正则验证
+ * @param {*} phone 手机号
+ */
+export const regPhone = phone => !/^1[3456789]\d{9}$/.test(phone);
+
+/**
+ * 字符长度验证
+ * @param params 字符串
+ * @param min 最小字符 默认：2
+ * @param max 最大字符串 默认：10
+ * @returns {boolean}
+ */
+export const regName = (params, min = 2, max = 10) =>
+  params.toString().replace(/\s/g, '').length > max || params.toString().replace(/\s/g, '').length < min;
+
+/**
  * 清除前后空格
  * @param str 字符串
  * @returns {*}
  */
-export function trim(str) {
-  return str.replace(/(^\s*)|(\s*$)/g, '');
-}
+export const trim = str => str.replace(/(^\s*)|(\s*$)/g, '');
 
 /**
- * 去除所有空格
+ * 清除所有空格
  * @param str 字符串
  * @returns {*}
  */
-export function removeAllSpace(str) {
-  return str.replace(/\s+/g, '');
-}
+export const trimAll = str => str.replace(/\s+/g, '');
 
 /**
- * 判断是否为空
- * @param str 字符串
- * @returns {boolean}
+ * 判断值类型是否为 String
+ * @param {*} val 字符串
+ * @returns
  */
-export function isEmpty(str) {
-  if (
-    str == null ||
-    Object.prototype.toString.call(str).slice(8, -1) == 'Undefined' ||
-    (Object.prototype.toString.call(str).slice(8, -1) === 'String' && (trim(str) == '' || trim(str) == 'null'))
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-}
+export const isString = val => isTypeOf(val, 'String');
+
+/**
+ * 判断值类型是否为 Undefined
+ * @param {*} val 字符串
+ * @returns
+ */
+export const isUndefined = val => isTypeOf(val, 'Undefined');
+
+/**
+ * 判断值类型是否为指定类型
+ * @param {*} value 值
+ * @param {str} type 类型字符串如：String、Number、Object等
+ * @returns
+ */
+export const isTypeOf = (value, type) => Object.prototype.toString.call(value).slice(8, -1) === type;
 
 /**
  * 判断是否为数组类型
  * @param arr 数组对象
  * @returns {boolean}
  */
-export function isArray(arr) {
-  return typeof arr == 'object' && arr.constructor == Array;
-}
+export const isArray = arr => typeof arr == 'object' && arr.constructor == Array;
+
+/**
+ * 判断是否为空
+ * @param val 字符串
+ * @returns {boolean}
+ */
+export const isNull = val =>
+  val == null || isUndefined(val) || (isString(val) && (trim(val) == '' || trim(val) == 'null'));
 
 /**
  * 判断对象是否为空
- * @param obj 字符串
+ * @param val 字符串
  * @returns {boolean}
  */
-export function isEmptyObj(obj) {
-  return Object.keys(obj) === 0 ? true : false;
-}
+export const isEmpty = val => (Object.keys(val) === 0 ? true : false);
+
+/**
+ * 对象转字符串
+ * @param {Object} obj 对象
+ * @param {String} glue 拼接字符
+ */
+export const converObjToString = (obj, glue = '&') => {
+  const arr = [];
+  for (const k in obj) {
+    arr.push(`${k}=${obj[k]}`);
+  }
+  return arr.join(glue);
+};
+
+/**
+ * 对象深拷贝
+ * @param obj 数组
+ * @returns {*[]}
+ */
+export const cloneDeep = obj => {
+  const result = Array.isArray(obj) ? [] : {};
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        result[key] = cloneDeep(obj[key]); //递归复制
+      } else {
+        result[key] = obj[key];
+      }
+    }
+  }
+  return result;
+};
+
+/**
+ * 展开所有嵌套数组
+ * @param arr 数组
+ * @param d 层级
+ * @returns {*}
+ */
+export const flatDeep = (arr, d = 1) =>
+  d > 0 ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? flatDeep(val, d - 1) : val), []) : arr.slice();
+
+/**
+ * 获取url地址中的参数
+ * @param {*} name
+ * @param {*} url
+ * @returns
+ */
+export const getURLParameter = (name, url) => {
+  return (
+    decodeURIComponent(
+      (new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || ['', ''])[1].replace(/\+/g, '%20'),
+    ) || null
+  );
+};
 
 /**
  * 节流函数
@@ -91,77 +167,12 @@ export function debounce(func, wait = 600) {
 }
 
 /**
- * 对象数组转字符串
- * @param {Object} obj 对象数组
- * @param {String} glue 拼接字符
- */
-export function objectToJoin(obj, glue = '&') {
-  const arr = [];
-  for (const k in obj) {
-    arr.push(`${k}=${obj[k]}`);
-  }
-  return arr.join(glue);
-}
-
-/**
- * 获取url地址中的参数
- */
-export function getURLParameter(name, url) {
-  return (
-    decodeURIComponent(
-      (new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || ['', ''])[1].replace(/\+/g, '%20'),
-    ) || null
-  );
-}
-
-/**
- * 对象深拷贝
- * @param obj 数组
- * @returns {*[]}
- */
-export function deepCopy(obj) {
-  const result = Array.isArray(obj) ? [] : {};
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      if (typeof obj[key] === 'object' && obj[key] !== null) {
-        result[key] = deepCopy(obj[key]); //递归复制
-      } else {
-        result[key] = obj[key];
-      }
-    }
-  }
-  return result;
-}
-
-/**
- * 手机号正则验证
- * @param {*} phone 手机号
- */
-export function regPhone(phone) {
-  const regPhone = /^1[3456789]\d{9}$/;
-  return !regPhone.test(phone);
-}
-
-/**
- * 字符长度验证
- * @param params 字符串
- * @param min 最小字符 默认：2
- * @param max 最大字符串 默认：10
- * @returns {boolean}
- */
-export function regName(params, min = 2, max = 10) {
-  const pattern =
-    params.toString().replace(/\s/g, '').length > max || params.toString().replace(/\s/g, '').length < min;
-  return pattern;
-}
-
-/**
  * 解析时间戳
  * @param time 时间戳
  * @param format 时间戳美化格式
  * @returns {string}
  */
-export function parseTime(time, pattern = 'yyyy-MM-dd hh:mm:ss') {
+export function formatTime(time, pattern = 'yyyy-MM-dd hh:mm:ss') {
   if (arguments.length === 0 || !time) {
     return null;
   }
@@ -207,9 +218,7 @@ export function parseTime(time, pattern = 'yyyy-MM-dd hh:mm:ss') {
  * @param d
  * @returns {number}
  */
-export function rad(d) {
-  return (d * Math.PI) / 180.0;
-}
+export const rad = d => (d * Math.PI) / 180.0;
 
 /**
  * 根据经纬度计算距离，参数分别为第一点的纬度，经度；第二点的纬度，经度
@@ -219,7 +228,7 @@ export function rad(d) {
  * @param lng2 进度-2
  * @returns {number}
  */
-export function getDistance(lat1, lng1, lat2, lng2) {
+export const getDistance = (lat1, lng1, lat2, lng2) => {
   const radLat1 = rad(lat1);
   const radLat2 = rad(lat2);
   const a = radLat1 - radLat2;
@@ -242,7 +251,17 @@ export function getDistance(lat1, lng1, lat2, lng2) {
   // }
 
   return s.toFixed(3) * 1000;
-}
+};
+
+/**
+ * 格式化距离
+ * @param {number} dis 距离,米
+ */
+export const formatDistance = dis => {
+  if (dis >= 10009999) return '>10000 千米';
+  else if (dis >= 1000) return `${Math.round(dis / 10) / 100} 千米`;
+  else return `${dis} 米`;
+};
 
 /**
  * 阿里OSS图片处理
@@ -255,11 +274,10 @@ export function getDistance(lat1, lng1, lat2, lng2) {
  * @param pixelRatio 设备像素比 默认：1
  * @returns {string}
  */
-export function getAliOssImageUrl(url, limit = 0, mode = 'fill', width, height, pixelRatio = 1) {
-  return height
+export const getAliOssImageUrl = (url, limit = 0, mode = 'fill', width, height, pixelRatio = 1) =>
+  height
     ? `${url}?x-oss-process=image/resize,limit_${limit},m_${mode},w_${(width / 2) * pixelRatio},h_${(height / 2) * pixelRatio}`
     : `${url}?x-oss-process=image/resize,limit_${limit},m_${mode},w_${(width / 2) * pixelRatio}`;
-}
 
 /**
  * 腾讯OSS图片处理
@@ -271,23 +289,10 @@ export function getAliOssImageUrl(url, limit = 0, mode = 'fill', width, height, 
  * @param pixelRatio 设备像素比 默认：1
  * @returns {string}
  */
-export function getTenOssImageUrl(url, mode = 2, width, height, pixelRatio = 1) {
-  return height
+export const getTenOssImageUrl = (url, mode = 2, width, height, pixelRatio = 1) =>
+  height
     ? `${url}?imageView2/${mode}/w/${(width / 2) * pixelRatio}/h/${(height / 2) * pixelRatio}`
     : `${url}?imageView2/${mode}/w/${(width / 2) * pixelRatio}`;
-}
-
-/**
- * 展开所有嵌套数组
- * @param arr 数组
- * @param d 层级
- * @returns {*}
- */
-export function flatDeep(arr, d = 1) {
-  return d > 0
-    ? arr.reduce((acc, val) => acc.concat(Array.isArray(val) ? flatDeep(val, d - 1) : val), [])
-    : arr.slice();
-}
 
 /**
  * 图片地址转换成base64
