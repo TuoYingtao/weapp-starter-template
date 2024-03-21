@@ -23,15 +23,15 @@ export function isRegisterMerchant(successCallback = null, errorCallback = null,
         switch (userAuditStatus) {
           case 0:
             return navigateTo({
-              url: '/pages_merchant/regist/index',
+              url: '/pages_merchant/regist/index'
             });
           case 1:
           case 3:
             return navigateTo({
               url: '/pages_result/auditSteps',
               query: {
-                userAuditStatus,
-              },
+                userAuditStatus
+              }
             });
           default:
         }

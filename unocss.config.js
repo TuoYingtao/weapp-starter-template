@@ -17,15 +17,15 @@ const transformRules = {
   '[': '-f111l-',
   ']': '-f111r-',
   $: '-r111-',
-  ',': '-r222-',
+  ',': '-r222-'
 };
 const { presetWeappAttributify, transformerAttributify } = extractorAttributify({
-  transformRules,
+  transformRules
 });
 
 export default defineConfig({
   content: {
-    pipeline: { include },
+    pipeline: { include }
   },
   theme: {
     // 解决小程序不支持 * 选择器
@@ -59,15 +59,15 @@ export default defineConfig({
       checkText: '#ff5100',
       mineHeader: '#ff5100',
       avatarText: '#ff5100',
-      addText: '#ff5100',
+      addText: '#ff5100'
     },
     borderRadius: {
       none: '0',
       sm: '10rpx',
       md: '20rpx',
       lg: '30rpx',
-      full: '50%',
-    },
+      full: '50%'
+    }
   },
   rules: [
     [/^f(\d+)-(\d+)$/, ([, size, height]) => ({ 'font-size': `${size}rpx`, 'line-height': `${height}rpx` })],
@@ -85,9 +85,9 @@ export default defineConfig({
               ? theme.colors[color]
               : theme.colors['grey'];
         return {
-          [key]: `${size}rpx ${style || 'solid'} ${borderColor}`,
+          [key]: `${size}rpx ${style || 'solid'} ${borderColor}`
         };
-      },
+      }
     ],
     [
       /^nowrap(\d+)?$/,
@@ -96,25 +96,25 @@ export default defineConfig({
         overflow: 'hidden',
         '-webkit-box-orient': 'vertical',
         'text-overflow': 'ellipsis',
-        '-webkit-line-clamp': line || 1,
-      }),
-    ],
+        '-webkit-line-clamp': line || 1
+      })
+    ]
   ],
   presets: [
     // https://github.com/MellowCo/unocss-preset-weapp
     presetWeapp({
-      transformRules,
+      transformRules
     }),
     // attributify autocomplete
-    presetWeappAttributify(),
+    presetWeappAttributify()
   ],
   transformers: [
     // options 见https://github.com/MellowCo/unocss-preset-weapp/tree/main/src/transformer/transformerClass
     transformerClass({
-      transformRules,
+      transformRules
     }),
     // options 见https://github.com/MellowCo/unocss-preset-weapp/tree/main/src/transformer/transformerAttributify
-    transformerAttributify(),
+    transformerAttributify()
   ],
   shortcuts: [
     {
@@ -122,12 +122,12 @@ export default defineConfig({
       'flex-center': 'flex items-center justify-center',
       'flex-center-between': 'flex items-center justify-between',
       'bg-gradient-primary': 'bg-gradient-to-r from-gradient-begin to-primary',
-      'pseudo-col': 'absolute top-1_2 -translate-y-1_2 content-[""]',
+      'pseudo-col': 'absolute top-1_2 -translate-y-1_2 content-[""]'
     },
     [/^wh-(\d+)$/, ([, c]) => `w-${c} h-${c}`],
     [/^(m|p)([trblxy]?)-(\d+)$/, ([, c, d, e]) => `${c + d}-${e}rpx`],
     [/^(rounded)-(\d+)$/, ([, c, d]) => `${c}-${d}rpx`],
-    [/^(.*)-important$/, ([, style]) => `${style}!`],
+    [/^(.*)-important$/, ([, style]) => `${style}!`]
   ],
   separators: '__',
   postprocess(util) {
@@ -136,5 +136,5 @@ export default defineConfig({
       const value = i[1];
       if (value && typeof value === 'string' && remRE.test(value)) i[1] = `${value.slice(0, -3) * 16 * 2}rpx`;
     });
-  },
+  }
 });

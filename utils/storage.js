@@ -44,7 +44,7 @@ export const setToken = (token = '', expireTime = 0) => {
   wx.setStorageSync(TOKEN_KEY, {
     create_time: new Date().valueOf(),
     expire_time: expireTime,
-    value: token,
+    value: token
   });
 };
 
@@ -87,6 +87,6 @@ export const setUploadCos = (data = {}, startTime, expireTime = 0) => {
   wx.setStorageSync(UPLOAD_COS_KEY, {
     startTime,
     expireTime,
-    value: JSON.stringify(data),
+    value: JSON.stringify(data)
   });
 };

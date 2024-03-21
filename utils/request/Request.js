@@ -1,6 +1,4 @@
-import cloneDeep from 'lodash/cloneDeep';
-import isFunction from 'lodash/isFunction';
-import isUndefined from 'lodash/isUndefined';
+import { cloneDeep, isUndefined, isFunction } from '@/utils/index';
 import { ResponseError } from '@/utils/request/ResponseErrorHandler';
 
 /**
@@ -190,9 +188,17 @@ export class VRequest {
       }
       conf.requestOptions = opt.requestOptions;
     }
-    const requestTask = wx.request(conf);
+    console.log(conf);
+    const requestTask = new Promise((resolve, reject) => {
+      wx.request({
+        ...conf,
+        success: res => resolve([null, res]),
+        fail: err => reject([err, null])
+      });
+    });
     return requestTask
       .then(([error, response]) => {
+        console.log(error, response);
         const { responseInterceptors, responseInterceptorsCatch, transformRequestHook } = transform;
         try {
           const res = responseInterceptors([error, response], conf);
@@ -203,9 +209,7 @@ export class VRequest {
             responseInterceptorsCatch(e.requestConfig);
           }
           wx.showToast({ icon: 'none', title: e.message });
-          throw new ResponseError(`
-请求地址：${e.url || conf.url};
-错误信息：${e.message};`);
+          throw new ResponseError(`请求地址：${e.url || conf.url};\n错误信息：${e.message};`);
         }
       })
       .finally(() => {});

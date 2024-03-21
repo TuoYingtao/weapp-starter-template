@@ -16,18 +16,19 @@ App({
     setUserInfoStorage({ username: 'aaa' });
     console.log(formatTime(new Date().getTime(), '{y}-{m}-{d} {h}:{i}:{s}'));
     showToast('afadsf');
+
     // 登录
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
-      },
+      }
     });
   },
   globalData: {
     application: {
-      ...envConfig,
+      ...envConfig
     },
     router: router,
-    userInfo: null,
-  },
+    userInfo: null
+  }
 });

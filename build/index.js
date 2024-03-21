@@ -6,6 +6,6 @@ const futureTask = getFutureTask();
 futureTask
   .addWorker(
     () => scriptEnv(),
-    () => scriptRouter(),
+    () => scriptRouter()
   )
   .execut();

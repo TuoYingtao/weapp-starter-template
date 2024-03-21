@@ -14,7 +14,9 @@
       "disablePlugins": [],
       "outputPath": ""
     },
-    "ignoreUploadUnusedFiles": true
+    "ignoreUploadUnusedFiles": true,
+    "minifyWXSS": false,
+    "condition": false
   },
   "condition": {},
   "editorSetting": {

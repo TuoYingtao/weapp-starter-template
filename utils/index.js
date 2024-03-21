@@ -36,6 +36,13 @@ export const trimAll = str => str.replace(/\s+/g, '');
 export const isString = val => isTypeOf(val, 'String');
 
 /**
+ * 判断值类型是否为 Function
+ * @param {*} val 字符串
+ * @returns
+ */
+export const isFunction = val => isTypeOf(val, 'Function');
+
+/**
  * 判断值类型是否为 Undefined
  * @param {*} val 字符串
  * @returns
@@ -49,6 +56,14 @@ export const isUndefined = val => isTypeOf(val, 'Undefined');
  * @returns
  */
 export const isTypeOf = (value, type) => Object.prototype.toString.call(value).slice(8, -1) === type;
+
+/**
+ * 验证对象中是否存在指定键
+ * @param {obj} vaule 对象
+ * @param {str} key 键
+ * @returns 存在键：true 否则：false
+ */
+export const isHasProperty = (vaule, key) => Object.prototype.hasOwnProperty.call(vaule, key);
 
 /**
  * 判断是否为数组类型
@@ -122,7 +137,7 @@ export const flatDeep = (arr, d = 1) =>
 export const getURLParameter = (name, url) => {
   return (
     decodeURIComponent(
-      (new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || ['', ''])[1].replace(/\+/g, '%20'),
+      (new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || ['', ''])[1].replace(/\+/g, '%20')
     ) || null
   );
 };
@@ -198,7 +213,7 @@ export function formatTime(time, pattern = 'yyyy-MM-dd hh:mm:ss') {
     h: date.getHours(),
     i: date.getMinutes(),
     s: date.getSeconds(),
-    a: date.getDay(),
+    a: date.getDay()
   };
   const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key];
@@ -236,7 +251,7 @@ export const getDistance = (lat1, lng1, lat2, lng2) => {
   let s =
     2 *
     Math.asin(
-      Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)),
+      Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2))
     );
   s = s * 6378.137; // EARTH_RADIUS;
   s = Math.round(s * 10000) / 10000; //输出为公里

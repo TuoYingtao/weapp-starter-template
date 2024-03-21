@@ -1,8 +1,9 @@
 module.exports = {
   "envType": "dev",
-  "appID": null,
+  "name": "weapp-starter-template",
+  "appID": "wx82ccbac5ad7ec480",
   "version": "1.0.0",
-  "remoteUrl": "https://localhost:8080",
+  "remoteUrl": "https://guapi.liangjihui.com",
   "cos": {
     "Bucket": "",
     "Region": "",

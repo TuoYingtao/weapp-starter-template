@@ -8,14 +8,14 @@ module.exports = {
   env: {
     es6: true,
     browser: true,
-    node: true,
+    node: true
   },
   ecmaFeatures: {
-    modules: true,
+    modules: true
   },
   parserOptions: {
     ecmaVersion: 15,
-    sourceType: 'module',
+    sourceType: 'module'
   },
   globals: {
     wx: true,
@@ -25,7 +25,7 @@ module.exports = {
     getApp: true,
     Component: true,
     requirePlugin: true,
-    requireMiniProgram: true,
+    requireMiniProgram: true
   },
   extends: ['eslint:recommended', 'plugin:prettier/recommended', 'prettier', '@unocss'],
   rules: {
@@ -132,13 +132,13 @@ module.exports = {
     'no-unused-vars': 0, // 禁止未使用过的变量
     // 'no-use-before-define': 2, // 禁止定义前使用
     // // 代码风格
-    // 'array-bracket-newline': [2, 'consistent'], // 在数组开括号后和闭括号前强制换行
-    // 'array-bracket-spacing': 2, // 强制在括号内前后使用空格
-    // 'array-element-newline': [2, { multiline: true }], // 强制数组元素间出现换行
-    // 'block-spacing': 2, // 强制在代码块中开括号前和闭括号后有空格
-    // 'brace-style': 2, // 大括号风格要求
-    // camelcase: 2, // 要求使用骆驼拼写法
-    // 'comma-dangle': [2, 'always-multiline'], // 要求或禁止使用拖尾逗号
+    'array-bracket-newline': [2, 'consistent'], // 在数组开括号后和闭括号前强制换行
+    'array-bracket-spacing': 0, // 强制在括号内前后使用空格
+    'array-element-newline': [0, { multiline: true }], // 强制数组元素间出现换行
+    'block-spacing': 2, // 强制在代码块中开括号前和闭括号后有空格
+    'brace-style': 2, // 大括号风格要求
+    camelcase: 0, // 要求使用骆驼拼写法
+    'comma-dangle': [2, 'never'], // 对象拖尾逗号
     // 'comma-spacing': 2, // 强制在逗号周围使用空格
     // 'comma-style': 2, // 逗号风格
     // 'computed-property-spacing': 2, // 禁止或强制在计算属性中使用空格
@@ -176,7 +176,7 @@ module.exports = {
     // 'no-inline-comments': 0, // 禁止使用内联注释
     // 'no-lonely-if': 2, // 禁止 if 语句作为唯一语句出现在 else 语句块中
     // 'no-mixed-spaces-and-tabs': 2, // 禁止使用 空格 和 tab 混合缩进
-    // 'no-multiple-empty-lines': 1, // 不允许多个空行
+    'no-multiple-empty-lines': [1, { max: 2 }], // 不允许多个空行
     // 'no-negated-condition': 2, // 禁用否定表达式
     // 'no-nested-ternary': 2, // 禁止使用嵌套的三元表达式
     // 'no-new-object': 2, // 禁止使用 Object 构造函数
@@ -186,7 +186,7 @@ module.exports = {
     // 'quote-props': [2, 'as-needed'], // 要求对象字面量属性名称使用引号
     // 'operator-linebreak': [2, 'before'], // 强制操作符使用一致的换行符风格
     // 'one-var': [2, 'never'], // 强制函数中的变量在一起声明或分开声明
-    // 'object-property-newline': 1, // 强制将对象的属性放在不同的行上
+    'object-property-newline': ['error', { allowAllPropertiesOnSameLine: true }] // 强制将对象的属性放在不同的行上
     // 'object-curly-spacing': [2, 'always'], // 强制在花括号中使用一致的空格
     // 'object-curly-newline': [
     //   1,
@@ -249,5 +249,5 @@ module.exports = {
     //   },
     // ], // import 排序 问题是要以字母排序
   },
-  plugins: ['prettier'],
+  plugins: ['prettier']
 };

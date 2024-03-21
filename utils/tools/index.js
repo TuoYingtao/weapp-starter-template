@@ -41,7 +41,7 @@ export function showModal(config, successCallback, cancelCallback) {
       fail: err => {
         console.error(err);
         reject(err);
-      },
+      }
     };
     if (!isEmpty(successCallback)) {
       config.success = res => {
@@ -62,6 +62,14 @@ export function showModal(config, successCallback, cancelCallback) {
 }
 
 /**
+ * 加载提示
+ * @param {str} title 内容
+ */
+export function showLoading(title) {
+  wx.showLoading({ title, mask: true });
+}
+
+/**
  * 拨打手机号
  * @param phoneNumber 手机号
  */
@@ -71,7 +79,7 @@ export function makePhoneCall(phoneNumber) {
     phoneNumber: phoneNumber,
     fail: err => {
       throw new Error(err.errMsg ?? '拨打手机号有误');
-    },
+    }
   });
 }
 
@@ -90,7 +98,7 @@ export function getImageInfo(imagePath) {
       },
       fail: err => {
         throw new Error(err.errMsg ?? '获取图片信息有误');
-      },
+      }
     });
   });
 }
@@ -122,9 +130,9 @@ export function saveImage(imageUrl) {
                   } else {
                     showToast('获取权限失败，将无法保存到相册');
                   }
-                },
+                }
               });
-            },
+            }
           });
         } else {
           showToast('图片保存失败');
@@ -146,7 +154,7 @@ export function setClipboardData(data) {
     data,
     fail: err => {
       throw new Error(err.errMsg ?? '粘贴失败');
-    },
+    }
   });
 }
 
@@ -186,7 +194,7 @@ export function navigateToMiniProgram(appId, path, extraData, envVersion = 'rele
           console.error(error);
           reject(error);
         }
-      },
+      }
     });
   });
 }
@@ -204,7 +212,7 @@ export function navigateBackMiniProgram(extraData) {
       fail: error => {
         console.error(error);
         reject(error);
-      },
+      }
     });
   });
 }
@@ -251,7 +259,7 @@ export async function getImageUrl(url) {
   let path = null;
   await wx
     .getImageInfo({
-      src: url,
+      src: url
     })
     .then(res => {
       path = res[1].path;
@@ -299,7 +307,7 @@ export const checkAppUpdate = function () {
             success: function () {
               // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
               updateManager.applyUpdate();
-            },
+            }
           });
         });
         // 下载失败
@@ -312,9 +320,9 @@ export const checkAppUpdate = function () {
             success: res => {
               // 新版下载失败，退出小程序
               wx.navigateBack({
-                delta: 0,
+                delta: 0
               });
-            },
+            }
           });
         });
       }
@@ -324,7 +332,7 @@ export const checkAppUpdate = function () {
     wx.showModal({
       title: '温馨提示',
       content: '当前微信版本过低，功能无法使用，请升级微信客户端',
-      showCancel: false,
+      showCancel: false
     });
   }
 };

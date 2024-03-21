@@ -29,8 +29,8 @@ export const getCosSecurity = function (callback, errCallback) {
         SecretId: credentials.TmpSecretId,
         SecretKey: credentials.TmpSecretKey,
         Method: 'POST',
-        Pathname: '/',
-      }),
+        Pathname: '/'
+      })
     });
   }, errCallback);
 };

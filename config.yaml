@@ -3,7 +3,7 @@ weapp:
   appID: wx82ccbac5ad7ec480 # 小程序ID
   version: 1.0.0 # 小程序版本
   env: # 远程服务地址
-    dev: https://localhost:8080
+    dev: https://guapi.liangjihui.com
     pro: https://localhost:8080
     test: https://localhost:8080
     view: https://localhost:8080

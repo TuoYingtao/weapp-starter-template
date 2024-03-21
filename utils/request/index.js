@@ -1,20 +1,21 @@
-import merge from 'lodash/merge';
-import isString from 'lodash/isString';
-import { NetworkError, RequestError, ResponseError } from './ResponseErrorHandler.js';
+import { isString } from '@/utils/index';
+import { getToken } from '@/utils/storage';
 import { VRequest } from '@/utils/request/Request';
-import { getToken } from '../storage';
-import { joinTimestamp, setObjToUrlParams } from './requestUtils';
+import { NetworkError, RequestError, ResponseError } from '@/utils/request/ResponseErrorHandler';
+import { joinTimestamp, setObjToUrlParams } from '@/utils/request/requestUtils';
 import {
   CONTENT_TYPE_MAP,
   DATA_TYPE_MAP,
   REQUEST_STATUS_CODE,
   RESPONSE_TYPE_MAP,
+  RESPONSE_KEY
 } from '@/utils/request/RequestConstant';
 import { silenceAuthorizedLogin } from '@/utils/tools/requestTools';
-import global from '@/config/global';
+
+const env = require('@/config/env.js');
 
 // 如果是mock模式 或 没启用直连代理 就不配置HOST 会走本地Mock拦截
-const HOST = process.env.API_BASE_URL;
+const HOST = env.remoteUrl;
 
 let requestQueue = [];
 let isSilenceLock = false;
@@ -54,27 +55,34 @@ const transform = {
       if (!data) {
         throw new ResponseError('【Response Error】请求接口错误', config.url, data.status, data, res);
       }
-      const { code, message } = data;
-      switch (code) {
+      switch (data[RESPONSE_KEY.dataKey]) {
         case REQUEST_STATUS_CODE.successCode:
           // 不进行任何处理，直接返回 用于页面代码可能需要直接获取code，data，message这些信息时开启
           if (!isTransformCodeResponse) {
             resolve(data);
           }
-          resolve(data.data);
+          resolve(data[RESPONSE_KEY.dataKey]);
           break;
         case REQUEST_STATUS_CODE.tokenAuthCode:
           config.isAuthorized = true;
           if (!isSilenceLock) {
             isSilenceLock = true;
-            silenceAuthorizedLogin().then(silence => silence.isSilence && onAccessTokenFetched());
+            silenceAuthorizedLogin()
+              .then(silence => silence.isSilence && onAccessTokenFetched())
+              .catch(err => console.log(err));
           }
           requestQueue.push(() => resolve(request.executor(config)));
           break;
         case REQUEST_STATUS_CODE.errorCode:
         default:
-          wx.showToast({ icon: 'none', title: message });
-          throw new ResponseError(`【Response Error】${message || '未知错误'}`, config.url, data.status, data, res);
+          wx.showToast({ icon: 'none', title: data[RESPONSE_KEY.messageKey] });
+          throw new ResponseError(
+            `【Response Error】${data[RESPONSE_KEY.messageKey] || '未知错误'}`,
+            config.url,
+            data.status,
+            data,
+            res
+          );
       }
     });
   },
@@ -145,7 +153,9 @@ const transform = {
     if (config.method.toUpperCase() === 'POST' && contentType !== CONTENT_TYPE_MAP.formData) {
       config.header['Content-Type'] = CONTENT_TYPE_MAP.formData;
     }
-    const token = getToken();
+    // const token = getToken();
+    const token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTM2MDcwMDQsInN1YiI6IueUqOaIt-WHreivgSIsIm5iZiI6MTcxMTAxNTAwNiwiYXVkIjoidXNlciIsImlhdCI6MTcxMTAxNTAwNCwianRpIjoiYjBkOTQyZTM5ZTA2ZDhmZWJkNjEwNWM4NDM4MTNjZjAiLCJpc3MiOiJhbGFuZyIsInN0YXR1cyI6MSwiZGF0YSI6eyJ1c2VyX2lkIjoiODAwMDQ1In19.9oCHJZZVeASdDSIcEH42H56DKi2jScVjOjdF9x_dlCU';
     if (token && options.requestOptions.withToken != false) {
       config.header[options.requestOptions.fieldToken] = options.requestOptions.authenticationScheme
         ? `${options.requestOptions.authenticationScheme} ${token}`
@@ -189,7 +199,7 @@ const transform = {
           conf.url,
           response.statusCode,
           response.data,
-          response,
+          response
         );
       }
       return { ...response, ...requestConfig };
@@ -213,7 +223,7 @@ const transform = {
       }, config.requestOptions.retry.delay || 1);
     });
     return backoff.then(config => request.executor(config));
-  },
+  }
 };
 
 /**
@@ -223,10 +233,10 @@ const transform = {
  */
 function createRequest(options) {
   return new VRequest(
-    merge(
+    Object.assign(
       {
         // 超时时间
-        timeout: 10 * 1000,
+        timeout: 6 * 1000,
         // 携带Cookie
         withCredentials: true,
         // 如果设为 json，会尝试对返回的数据做一次 JSON.parse
@@ -269,18 +279,16 @@ function createRequest(options) {
           // 重试机制
           retry: {
             count: 3,
-            delay: 1000,
+            delay: 1000
           },
           // 固定参数 如小程序版本号
           fixedParams: {
-            mpVersion: global.app_version,
-            src: global.src,
-            userKey: global.userKey,
-          },
-        },
+            mpVersion: env.version
+          }
+        }
       },
-      options || {},
-    ),
+      options || {}
+    )
   );
 }
 

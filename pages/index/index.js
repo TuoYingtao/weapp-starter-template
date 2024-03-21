@@ -4,23 +4,43 @@ const defaultAvatarUrl =
   'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0';
 
 _Page({
+  pageConfig: {
+    pageApi: '/front/notice',
+    enter: {
+      pageKey: 'page3',
+      limitKey: 'size3',
+      totalKey: 'count3'
+    },
+    beforePageCallback: () => {
+      return e => {
+        console.log('beforePageCallback', this, e);
+      };
+    }
+  },
+  onAdapterPage(successCallback, errorCallback) {
+    console.log('onAdapterPage', this);
+    console.log(successCallback());
+    console.log(errorCallback());
+  },
   data() {
     return {
       motto: 'Hello World',
       userInfo: {
         avatarUrl: defaultAvatarUrl,
-        nickName: '',
+        nickName: ''
       },
       hasUserInfo: false,
       canIUseGetUserProfile: wx.canIUse('getUserProfile'),
-      canIUseNicknameComp: wx.canIUse('input.type.nickname'),
+      canIUseNicknameComp: wx.canIUse('input.type.nickname')
     };
   },
-  created() {},
+  created() {
+    console.log(this.data);
+  },
   methods: {
     bindViewTap() {
       wx.navigateTo({
-        url: '../logs/logs',
+        url: '../logs/logs'
       });
     },
     onChooseAvatar(e) {
@@ -28,7 +48,7 @@ _Page({
       const { nickName } = this.data.userInfo;
       this.setData({
         'userInfo.avatarUrl': avatarUrl,
-        hasUserInfo: nickName && avatarUrl && avatarUrl !== defaultAvatarUrl,
+        hasUserInfo: nickName && avatarUrl && avatarUrl !== defaultAvatarUrl
       });
     },
     onInputChange(e) {
@@ -36,7 +56,7 @@ _Page({
       const { avatarUrl } = this.data.userInfo;
       this.setData({
         'userInfo.nickName': nickName,
-        hasUserInfo: nickName && avatarUrl && avatarUrl !== defaultAvatarUrl,
+        hasUserInfo: nickName && avatarUrl && avatarUrl !== defaultAvatarUrl
       });
     },
     getUserProfile(e) {
@@ -47,10 +67,10 @@ _Page({
           console.log(res);
           this.setData({
             userInfo: res.userInfo,
-            hasUserInfo: true,
+            hasUserInfo: true
           });
-        },
+        }
       });
-    },
-  },
+    }
+  }
 });

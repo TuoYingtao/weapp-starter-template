@@ -1,13 +1,12 @@
-import { request } from '@/utils/request';
+import { request } from '@/utils/request/index';
 import { getUploadCos, setToken, setUploadCos, setUserInfoStorage } from '@/utils/storage';
-import { camSafeUrlEncode, genNewKey, getCosSecurity } from '@/utils/cos';
+import { camSafeUrlEncode, genNewKey, getCosSecurity } from '@/utils/cos/index';
 import { showToast } from '@/utils/tools/index';
-import store from '@/store';
 
 const upload = {
-  stsUrl: '/pub/upload/cos/token',
+  stsUrl: '/pub/upload/cos/token'
 };
-const prefix = process.env.PREVIEW_PICTURE_URL;
+const prefix = require('@/config/env.js').cos.previewPictureUrl;
 
 /**
  * 静默登录
@@ -15,16 +14,18 @@ const prefix = process.env.PREVIEW_PICTURE_URL;
  */
 export function silenceAuthorizedLogin() {
   const requestInstance = request.getRequest();
+  const loginPromise = new Promise((resolve, reject) => {
+    wx.login({
+      scopes: 'auth_base',
+      success: res => resolve([null, res]),
+      fail: err => reject([err, null])
+    });
+  });
   return new Promise((resolve, reject) => {
-    wx.login({ scopes: 'auth_base' }).then(([error, result]) => {
+    loginPromise.then(([error, result]) => {
       if (error) throw new Error(result.errMsg ?? error);
       const data = { code: result.code };
-      const instance = requestInstance(
-        { url: '/weixin/login', method: 'POST', data },
-        {
-          urlPrefix: '/auth',
-        },
-      );
+      const instance = requestInstance({ url: '/weixin/login', method: 'POST', data }, { urlPrefix: '/auth' });
       instance
         .then(res => {
           setToken(res.Token, new Date().valueOf() + Number(res.Expires) * 1000);
@@ -32,12 +33,11 @@ export function silenceAuthorizedLogin() {
             legalMobile: res.LegalMobile,
             legalName: res.LegalName,
             account: res.Account,
-            status: res.Status,
+            status: res.Status
           });
-          store.dispatch('userInfo', res);
           resolve({ token: res.Token, isSilence: true });
         })
-        .catch(error => {
+        .catch(err => {
           reject({ token: '', isSilence: false });
         });
     });
@@ -91,7 +91,7 @@ export function upLoadFileTemplate() {
                 success_action_status: 200,
                 Signature: authData.Authorization,
                 'x-cos-security-token': authData.XCosSecurityToken,
-                'Content-Type': '',
+                'Content-Type': ''
               },
               success: uploadFileRes => {
                 const src = camSafeUrlEncode(key).replace(/%2F/g, '/');
@@ -107,14 +107,14 @@ export function upLoadFileTemplate() {
                   showToast('当前服务器繁忙，请稍后再试');
                 }
                 reject(err);
-              },
+              }
             });
           },
           function (error) {
             reject(error);
-          },
+          }
         );
-      },
+      }
     });
   });
 }

@@ -6,12 +6,10 @@
     "allowImportingTsExtensions": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
+    "baseUrl": ".",
     "paths": {
       "@/*": ["/*"]
-    },
+    }
   },
-  "exclude": [
-    "node_modules",
-    "**/node_modules/*"
-  ]
+  "exclude": ["node_modules", "**/node_modules/*"]
 }

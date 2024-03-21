@@ -1,15 +1,18 @@
-import { get } from './request';
-import { converObjToString } from '@/utils/index';
+import { converObjToString, isEmpty, isHasProperty } from '@/utils/index';
 import { navigateTo, redirectTo, navigateBack } from '@/utils/tools/navigateTools';
 import { showLoading, hideLoading, showToast } from '@/utils/tools/index';
 import { getUserInfoStorage } from '@/utils/storage';
+import { PAGE_KEY } from '@/utils/request/RequestConstant';
+import { request } from '@/utils/request/index';
+import { RESPONSE_KEY } from '@/utils/request/RequestConstant';
 
-export default (pageOptions, processDataCallback, beforeGetListCallback) => {
+export default pageOptions => {
+  const adapter = {};
   const options = {};
   const app = {
     data() {
       return {
-        $globalData: getApp().globalData,
+        $globalData: getApp().globalData
       };
     },
     methods: {
@@ -29,7 +32,7 @@ export default (pageOptions, processDataCallback, beforeGetListCallback) => {
         },
         currentPages() {
           return getCurrentPages();
-        },
+        }
       },
       $goPage(e) {
         const { url } = e.currentTarget.dataset;
@@ -51,95 +54,106 @@ export default (pageOptions, processDataCallback, beforeGetListCallback) => {
       onShareAppMessage: function () {
         return {
           title: this.data.$globalData.application.name,
-          path: `${this.route}?scene=${converObjToString(getUserInfoStorage())}`,
+          path: `${this.route}?scene=${converObjToString(getUserInfoStorage())}`
         };
       },
       onShareTimeline: function () {
         return {
           title: this.data.$globalData.application.name,
-          query: `${this.route}?scene=${converObjToString(getUserInfoStorage())}`,
+          query: `${this.route}?scene=${converObjToString(getUserInfoStorage())}`
         };
       },
-      $tm() {},
-    },
+      $tm() {}
+    }
   };
 
-  if (pageOptions.listApi) {
-    let { listUrl } = pageOptions.listApi;
+  adapter.onAdapterPage = value => {
+    pageOptions.onAdapterPage(
+      () => value,
+      () => value
+    );
+  };
+
+  if (pageOptions.pageConfig && pageOptions.pageConfig.pageApi) {
     const data = app.data.apply(this);
+    const { pageApi, enter } = pageOptions.pageConfig;
+    const [pageKey, limitKey, totalKey, listKey] = [
+      !isEmpty(enter) && enter.pageKey ? enter.pageKey : PAGE_KEY.pageKey,
+      !isEmpty(enter) && enter.limitKey ? enter.limitKey : PAGE_KEY.limitKey,
+      !isEmpty(enter) && enter.totalKey ? enter.totalKey : PAGE_KEY.totalKey,
+      !isEmpty(enter) && enter.listKey ? enter.listKey : PAGE_KEY.listKey
+    ];
     Object.assign(data, {
-      page: 1,
-      size: 10,
+      ...(() => {
+        const pageData = {};
+        pageData[pageKey] = 1;
+        pageData[limitKey] = 10;
+        pageData[totalKey] = 0;
+        return pageData;
+      })(),
       query: {},
-      lists: [],
-      count: 0,
+      pages: [],
       loaded: false,
-      clickIndex: -1,
+      clickIndex: -1
     });
-    app.data = () => {
-      return data;
-    };
+    app.data = () => data;
     Object.assign(app.methods, {
       init() {
         this.$loading();
-        listUrl && this.getList();
+        pageApi && this.getPage();
       },
-      async getList() {
-        let { page, size, query, lists, loaded, clickIndex } = this.data;
+      async getPage() {
+        let { query, pages, loaded, clickIndex } = this.data;
         if (loaded && clickIndex === -1) {
           return;
         }
         if (clickIndex > -1) {
-          page = Math.ceil(clickIndex / size) || 1;
+          this.data[pageKey] = Math.ceil(clickIndex / this.data[limitKey]) || 1;
         }
-
-        // 使用回调函数处理需要修改listUrl的请求
-        if (beforeGetListCallback && typeof beforeGetListCallback === 'function') {
-          listUrl = await beforeGetListCallback(this);
-        }
-        get(listUrl, {
-          page,
-          size,
-          ...query,
-        })
-          .then(async res => {
-            //返回的数据可能是数组也可能是包含list键值的对象
-            const list = Array.isArray(res) ? res : Object.prototype.hasOwnProperty.call(res, 'list') ? res.list : [];
-            // 临时处理结束 会员购买记录接口
-            if (clickIndex > -1) {
-              lists.splice((page - 1) * size, size, ...list);
-              //判断是否是删除，删除会导致有一条数据重复，判断id是否相同，删除相同数据
-              const lastListItem = list[list.length - 1];
-              const afterListItem = lists[page * size];
-              if (afterListItem && lastListItem.id === afterListItem.id) {
-                lists.splice(page * size, 1);
-              }
-              await this.$set({
-                lists,
-              });
-              this.data.clickIndex = -1;
-            } else {
-              await this.$set({
-                lists: page === 1 ? list : lists.concat(list),
-                page: list.length < size ? page : page + 1,
-                loaded: list.length < size,
-              });
+        try {
+          const result = await request.get({
+            url: pageApi,
+            params: {
+              [pageKey]: this.data[pageKey],
+              [limitKey]: this.data[limitKey],
+              ...query
             }
-            // 使用回调函数处理特定的数据
-            if (processDataCallback && typeof processDataCallback === 'function') {
-              await processDataCallback(res, this);
-            }
-            // 临时处理开始  对以下特定页面做特殊逻辑判断
-            this.$loaded();
-          })
-          .catch(async err => {
-            await showToast(err.message);
-            navigateBack();
           });
+          const [page, limit] = [this.data[pageKey], this.data[limitKey]];
+          //返回的数据可能是数组也可能是包含list键值的对象
+          const list = Array.isArray(result[RESPONSE_KEY.dataKey])
+            ? result[RESPONSE_KEY.dataKey]
+            : isHasProperty(result[RESPONSE_KEY.dataKey], listKey)
+              ? result[RESPONSE_KEY.dataKey][listKey]
+              : [];
+          if (clickIndex > -1) {
+            pages.splice((page - 1) * limit, limit, ...list);
+            //判断是否是删除，删除会导致有一条数据重复，判断id是否相同，删除相同数据
+            const lastListItem = list[list.length - 1];
+            const afterListItem = pages[page * limit];
+            if (afterListItem && JSON.stringify(lastListItem) === JSON.stringify(afterListItem)) {
+              pages.splice(page * limit, 1);
+            }
+            await this.$set({ pages });
+            this.data.clickIndex = -1;
+          } else {
+            await this.$set({
+              pages: page === 1 ? list : pages.concat(list),
+              [pageKey]: list.length < limit ? page : page + 1,
+              loaded: list.length < limit
+            });
+          }
+          adapter.onAdapterPage(result);
+          this.$loaded();
+        } catch (err) {
+          adapter.onAdapterPage(err);
+          await showToast(err.message);
+          navigateBack();
+        }
       },
       onReachBottom() {
-        this.getList();
-      },
+        this.getPage();
+      }
     });
   }
 
@@ -153,7 +167,7 @@ export default (pageOptions, processDataCallback, beforeGetListCallback) => {
     if (pageOptions.created) {
       pageOptions.created.apply(this, arguments);
     }
-    if (pageOptions.listApi) {
+    if (pageOptions.pageConfig && pageOptions.pageConfig.pageApi) {
       this.init();
     }
   };
@@ -163,8 +177,8 @@ export default (pageOptions, processDataCallback, beforeGetListCallback) => {
       pageOptions.activated.apply(this, arguments);
     }
     const { clickIndex } = this.data;
-    if (pageOptions.listApi && clickIndex > -1) {
-      this.getList();
+    if (pageOptions.pageConfig && pageOptions.pageConfig.pageApi && clickIndex > -1) {
+      this.getPage();
     }
   };
 
@@ -185,6 +199,5 @@ export default (pageOptions, processDataCallback, beforeGetListCallback) => {
       pageOptions.destroyed.apply(this, arguments);
     }
   };
-
   Page(Object.assign({}, options, app.methods, pageOptions.methods));
 };
