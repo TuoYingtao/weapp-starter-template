@@ -1,4 +1,8 @@
 #!/usr/bin/env sh
+# 由 git commit 调用
+# 可以使用 git commit --no-verify 绕过
+# 在获取建议的提交日志消息和进行提交之前被调用
+
 # . "${0%/*}/_"
 . "$(dirname -- "$0")/_/husky.sh"
 
