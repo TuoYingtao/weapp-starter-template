@@ -2,6 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
+// git branch name = feature/cli_33 => auto get defaultIssues = #33
+const issue = execSync('git rev-parse --abbrev-ref HEAD').toString().trim().split('_')[1];
+
 const scopes = fs
   .readdirSync(path.resolve(__dirname, ''), { withFileTypes: true })
   .filter(dirent => dirent.isDirectory())
@@ -125,7 +128,7 @@ module.exports = {
       { value: 'link', name: 'link:     链接 ISSUES 进行中' },
       { value: 'closed', name: 'closed:   标记 ISSUES 已完成' }
     ],
-    customIssuePrefixsAlign: 'top',
+    customIssuePrefixsAlign: !issue ? 'top' : 'bottom',
     emptyIssuePrefixsAlias: 'skip',
     customIssuePrefixsAlias: 'custom',
     confirmColorize: true,
@@ -134,7 +137,7 @@ module.exports = {
     minSubjectLength: 0,
     scopeOverrides: undefined,
     defaultBody: '',
-    defaultIssues: '',
+    defaultIssues: !issue ? '' : `#${issue}`,
     defaultSubject: ''
   }
 };
