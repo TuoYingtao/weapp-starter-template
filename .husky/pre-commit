@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+# . "${0%/*}/_"
+. "$(dirname -- "$0")/_/husky.sh"
+
+npm run unocss:build
+npm run lint

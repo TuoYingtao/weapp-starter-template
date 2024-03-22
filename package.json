@@ -11,7 +11,7 @@
     "unocss": "unocss pages/**/*.wxml -c unocss.config.js --watch -o unocss.wxss",
     "unocss:build": "unocss pages/**/*.wxml -c unocss.config.js -o  unocss.wxss",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "lint:style": "stylelint './**/*.{vue,css,scss,less}' --fix",
+    "lint:style": "stylelint './**/*.{vue,css,scss,less,wxss}' --fix",
     "format": "prettier --write .",
     "prepare": "husky install"
   },
@@ -22,6 +22,8 @@
     "qs": "^5.2.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.2.1",
+    "@commitlint/config-conventional": "^19.1.0",
     "@unocss/cli": "^0.58.5",
     "@unocss/eslint-config": "^0.58.5",
     "cross-env": "^7.0.3",
@@ -35,12 +37,18 @@
     "unocss-preset-weapp": "^0.58.6",
     "yaml": "^2.4.1"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run unocss:build && npm run lint",
+      "commit-msg": "npx --no-install commitlint --edit $1"
+    }
+  },
   "type": "commonjs",
   "lint-staged": {
     "./**/*.{js,ts,jsx,tsx,vue}": [
       "eslint --fix"
     ],
-    "./**/*.{vue,css,scss,less}": [
+    "./**/*.{vue,css,scss,less,wxss}": [
       "stylelint --fix"
     ]
   }
