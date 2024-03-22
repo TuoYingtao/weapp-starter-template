@@ -45,7 +45,8 @@ module.exports = {
     },
     customScopesAlign: !scopeComplete ? 'top' : 'bottom',
     defaultScope: scopeComplete,
-    scopes: [...scopes, 'mock'],
+    scopes: ['site', 'util', 'script', 'tool', 'mock', ...scopes],
+    scopeFilters: ['__tests__', '_util'],
     allowEmptyIssuePrefixs: true,
     allowCustomIssuePrefixs: true,
     messages: {

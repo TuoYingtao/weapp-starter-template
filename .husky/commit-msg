@@ -2,7 +2,6 @@
 # 由 git commit 和 git merge 调用
 # 可以使用 git commit --no-verify 绕过
 
-# . "${0%/*}/_"
 . "$(dirname -- "$0")/_/husky.sh"
 
 #--no-install 参数表示强制npx使用项目中node_modules目录中的commitlint包
