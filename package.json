@@ -15,14 +15,15 @@
     "lint:lint-staged": "lint-staged",
     "format": "prettier --write .",
     "prepare": "husky install",
-    "commitizen": "commitizen init cz-git --save-dev",
+    "commitizen:init": "commitizen init cz-git --save-dev",
     "git:commit": "cz",
-    "git:changelog": "conventional-changelog -p angular -u -i CHANGELOG.md -s -r 0"
+    "git:changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@vant/weapp": "^1.11.4",
+    "commitlint": "^19.2.1",
     "qs": "^5.2.1"
   },
   "devDependencies": {
@@ -33,7 +34,6 @@
     "commitizen": "^4.3.0",
     "conventional-changelog-cli": "^4.1.0",
     "cross-env": "^7.0.3",
-    "cz-conventional-changelog": "^3.3.0",
     "cz-git": "^1.9.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
