@@ -128,6 +128,7 @@ module.exports = {
       { value: 'link', name: 'link:     链接 ISSUES 进行中' },
       { value: 'closed', name: 'closed:   标记 ISSUES 已完成' }
     ],
+    defaultIssues: !issue ? '' : `#${issue}`,
     customIssuePrefixsAlign: !issue ? 'top' : 'bottom',
     emptyIssuePrefixsAlias: 'skip',
     customIssuePrefixsAlias: 'custom',
@@ -137,7 +138,6 @@ module.exports = {
     minSubjectLength: 0,
     scopeOverrides: undefined,
     defaultBody: '',
-    defaultIssues: !issue ? '' : `#${issue}`,
     defaultSubject: ''
   }
 };
