@@ -227,7 +227,7 @@ command+=" --infile CHANGELOG.md"
 echo "The command executed is：$command"
 eval $command
 
-#git push --follow-tags
-#echo '✅ git push success'
-#npm publish
+git push --follow-tags
+echo '✅ git push success'
+npm publish
 echo "🎉🎉🎉 Release finished."
