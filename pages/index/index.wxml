@@ -21,7 +21,9 @@
       </block>
     </view>
     <view class="usermotto">
-      <text class="user-motto">{{motto}}</text>
+      <text class="user-motto w-20px h-20px text-10px mt-2px">{{motto}}</text>
     </view>
   </view>
 </scroll-view>
+
+<tab-bar wx:if="{{ zIndex > 9999 }}"></tab-bar>

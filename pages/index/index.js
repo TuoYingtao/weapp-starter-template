@@ -24,6 +24,7 @@ _Page({
   },
   data() {
     return {
+      zIndex: 9999999,
       motto: 'Hello World',
       userInfo: {
         avatarUrl: defaultAvatarUrl,
