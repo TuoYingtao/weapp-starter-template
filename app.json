@@ -6,7 +6,7 @@
   ],
   "subpackages": [
     {
-      "root": "userModule",
+      "root": "user_module",
       "pages": ["index", "user_info/index"]
     }
   ],
@@ -17,7 +17,7 @@
     "navigationBarBackgroundColor": "#ffffff"
   },
   "tabBar": {
-    "custom": true,
+    "custom": false,
     "position": "bottom",
 		"color": "#666666",
 		"selectedColor": "#000000",
@@ -41,7 +41,7 @@
   "preloadRule": {
     "pages/index/index": {
       "network": "all",
-      "packages": ["pages/userModule"]
+      "packages": ["user_module"]
     }
   },
   "style": "v2",
