@@ -4,4 +4,8 @@ page,::before,::after{--un-rotate:0;--un-rotate-x:0;--un-rotate-y:0;--un-rotate-
 .rounded-10{border-radius:10rpx;}
 .wh-full{width:100%;height:100%;}
 /* layer: default */
+.mt-2px{margin-top:2px;}
 .bg-cityBg{--un-bg-opacity:1;background-color:rgba(255,220,204,var(--un-bg-opacity));}
+.text-10px{font-size:10px;}
+.h-20px{height:20px;}
+.w-20px{width:20px;}

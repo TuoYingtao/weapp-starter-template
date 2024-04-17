@@ -2,7 +2,8 @@ import { defineConfig } from 'unocss';
 import presetWeapp from 'unocss-preset-weapp';
 import { defaultRules, extractorAttributify, transformerClass } from 'unocss-preset-weapp/transformer';
 
-const include = [/\.wxml$/];
+
+const include = [/\.wxml$/]
 const remRE = /^-?[.\d]+rem$/;
 const transformRules = {
   ...defaultRules,
@@ -27,6 +28,7 @@ export default defineConfig({
   content: {
     pipeline: { include }
   },
+  presets: [presetWeapp()],
   theme: {
     // 解决小程序不支持 * 选择器
     preflightRoot: ['page,::before,::after'],
