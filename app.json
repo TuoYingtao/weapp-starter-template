@@ -1,21 +1,48 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/user/index"
   ],
   "subpackages": [
     {
-      "root": "pages/userModule",
-      "pages": [
-        "index",
-        "user_info/index"
-      ]
+      "root": "userModule",
+      "pages": ["index", "user_info/index"]
     }
   ],
   "window": {
+    "backgroundTextStyle": "light",
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "Weixin",
+    "navigationBarTitleText": "小程序启动模板",
     "navigationBarBackgroundColor": "#ffffff"
+  },
+  "tabBar": {
+    "custom": true,
+    "position": "bottom",
+		"color": "#666666",
+		"selectedColor": "#000000",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+		"list": [
+			{
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "/assets/images/tabBar/home.png",
+        "selectedIconPath": "/assets/images/tabBar/homeActive.png"
+			},
+			{
+        "pagePath": "pages/user/index",
+        "text": "我的",
+        "iconPath": "/assets/images/tabBar/user.png",
+        "selectedIconPath": "/assets/images/tabBar/userActive.png"
+			}
+		]
+	},
+  "preloadRule": {
+    "pages/index/index": {
+      "network": "all",
+      "packages": ["pages/userModule"]
+    }
   },
   "style": "v2",
   "componentFramework": "glass-easel",
@@ -23,5 +50,9 @@
   "lazyCodeLoading": "requiredComponents",
   "resolveAlias": {
     "@/*": "/*"
-  }
+  },
+  "networkTimeout": {
+		"request": 10000,
+		"downloadFile": 10000
+	}
 }
