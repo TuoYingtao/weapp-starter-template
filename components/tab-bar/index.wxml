@@ -1,0 +1,21 @@
+<van-tabbar active="{{ active }}" active-color="#000000" inactive-color="#666666">
+	<van-tabbar-item wx:for="{{ list }}" wx:key="index">
+		<block wx:if="{{!item.isSpecial}}">
+			<image slot="icon" src="{{ item.icon }}" mode="aspectFit" class="w-20px h-20px" />
+			<image
+				slot="icon-active"
+				src="{{ item.icon_active }}"
+				mode="aspectFit"
+				class="w-20px h-20px"
+			/>
+			<view class="text-10px mt-2px">{{item.text}}</view>
+		</block>
+		<view
+			class="relative z-1 w-48px h-48px p-3px -translate-y-18px text-center border-t border-hex-f2f2f3 rounded-full"
+			wx:else
+		>
+			<image slot="icon" src="{{ item.icon }}" mode="aspectFit" class="w-42px h-42px" />
+			<view class="text-10px mt-3px text-center">{{item.text}}</view>
+		</view>
+	</van-tabbar-item>
+</van-tabbar>
