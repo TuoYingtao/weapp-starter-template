@@ -1,0 +1,37 @@
+/**
+ * 格式化时间戳成指定格式
+ * @param n 
+ */
+var formatNumber = function (n) {
+	n = n.toString()
+	return n[1] ? n : '0' + n
+}
+
+/**
+ * 时间戳格式化
+ * @param number 时间戳
+ * @param format 转换格式
+ */
+var formatTime = function (number, format) {
+	var date = getDate(number * 1000)
+	var formateArr = ['Y', 'M', 'D', 'h', 'm', 's']
+	var returnArr = []
+	if (!format) format = 'Y-M-D h:m:s'
+
+	returnArr.push(date.getFullYear())
+	returnArr.push(formatNumber(date.getMonth() + 1))
+	returnArr.push(formatNumber(date.getDate()))
+
+	returnArr.push(formatNumber(date.getHours()))
+	returnArr.push(formatNumber(date.getMinutes()))
+	returnArr.push(formatNumber(date.getSeconds()))
+
+	returnArr.forEach(function (item, index) {
+		format = format.replace(formateArr[index], item)
+	})
+	return format
+}
+
+module.exports = {
+	formatTime: formatTime
+}

@@ -1,0 +1,12 @@
+/**
+ * 过滤文字两端空格
+ * @param str 
+ */
+var formatTrim = function (str) {
+  str = str.toString()
+  return str.trim()
+}
+
+module.exports = {
+  formatTrim: formatTrim
+}
